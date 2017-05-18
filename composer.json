@@ -1,0 +1,18 @@
+{
+  "name": "silinternational/simplesamlphp-module-expirychecker",
+  "description": "simpleSAMLphp module for warning users that their password will expire soon or has already expired.",
+  "type": "simplesamlphp-module",
+  "license": "LGPL-2.1",
+  "authors": [
+    {
+      "name": "Matt Henderson",
+      "email": "matt_henderson@sil.org"
+    }
+  ],
+  "minimum-stability": "stable",
+  "require": {
+    "php": ">=7.0",
+    "roave/security-advisories": "dev-master",
+    "simplesamlphp/simplesamlphp": "^1.14.12"
+  }
+}
