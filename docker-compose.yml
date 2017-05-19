@@ -1,0 +1,36 @@
+version: "2"
+
+services:
+
+  web:
+    image: silintl/ssp-base:develop
+    ports:
+      - "80:80"
+      - "9000:9000"
+    volumes:
+      - ./:/expirychecker
+      - ./development/enable-debug.sh:/data/enable-debug.sh
+      - ./development/run-dev.sh:/data/run-dev.sh
+      - ./development/run-tests.sh:/data/run-tests.sh
+      - ./development/symlink.sh:/data/symlink.sh
+      - ./src:/data/src
+    env_file:
+      - ./common.env
+      - ./local.env
+    command: ["/data/run-dev.sh"]
+
+  tests:
+    image: silintl/ssp-base:develop
+    volumes_from:
+      - web
+    volumes:
+      - ./composer.json:/data/composer.json
+      - ./composer.lock:/data/composer.lock
+      - ./development/run-tests.sh:/data/run-tests.sh
+      - ./features:/data/features
+      - ./vendor:/data/vendor
+    env_file:
+      - ./common.env
+      - ./local.env
+    working_dir: /data
+    command: ["/data/run-tests.sh"]
