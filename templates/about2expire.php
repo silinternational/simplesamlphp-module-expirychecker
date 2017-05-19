@@ -12,7 +12,7 @@
  */
 
 
-//$this->data['header'] = $this->t('{expirycheck:warning:warning_header}');
+//$this->data['header'] = $this->t('{expirychecker:warning:warning_header}');
 
 # netid will expire today
 if ($this->data['daysleft'] == 0) {
@@ -70,7 +70,7 @@ else {
 
 }
 
-//$this->data['header'] = str_replace("%DAYSLEFT%", $this->data['daysleft'], str_replace("%NETID%", $this->data['netId'], $this->t('{expirycheck:warning:warning_header}')));
+//$this->data['header'] = str_replace("%DAYSLEFT%", $this->data['daysleft'], str_replace("%NETID%", $this->data['netId'], $this->t('{expirychecker:warning:warning_header}')));
 $this->data['autofocus'] = 'yesbutton';
 
 $this->includeAtTemplateBase('includes/header.php');
