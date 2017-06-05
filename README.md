@@ -47,5 +47,5 @@ https://github.com/silinternational/simplesamlphp-module-expirychecker
 
 ## Acknowledgements ##
 This is adapted from the `ssp-iidp-expirycheck` and `expirycheck` modules. 
-Thanks to Alex Mihičinac, Steve Moitozo, and Steve Bagwell for the initial they 
-did on those two modules.
+Thanks to Alex Mihičinac, Steve Moitozo, and Steve Bagwell for the initial work 
+they did on those two modules.
