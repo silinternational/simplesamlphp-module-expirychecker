@@ -62,8 +62,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         if (array_key_exists('warndaysbefore', $config)) {
             $this->warndaysbefore = $config['warndaysbefore'];
             if (!is_int($this->warndaysbefore)) {
-                throw new Exception('Invalid value for number of days ' . 
-                                    'given to expirychecker::ExpiryDate filter.');
+                throw new Exception(sprintf(
+                    'Invalid value for number of days (%s) given to '
+                    . 'expirychecker::ExpiryDate filter.',
+                    var_export($this->warndaysbefore, true)
+                ), 1496770709);
             }
         } else {
             $this->warndaysbefore = 0;
