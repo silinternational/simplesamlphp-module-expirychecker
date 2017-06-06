@@ -2,10 +2,10 @@ version: "2"
 
 services:
 
-  web:
-    image: silintl/ssp-base:develop
+  idp:
+    image: silintl/ssp-base:feature_add-expirychecker
     ports:
-      - "80:80"
+      - "8085:80"
       - "9000:9000"
     volumes:
       - ./:/expirychecker
@@ -14,15 +14,59 @@ services:
       - ./development/run-tests.sh:/data/run-tests.sh
       - ./development/symlink.sh:/data/symlink.sh
       - ./src:/data/src
+
+      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
+
+      # Utilize custom certs
+      - ./development/idp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
+
+      # Utilize custom configs
+      - ./development/idp-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
+      - ./development/idp-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
+
+      # Utilize custom metadata
+      - ./development/idp-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
+      - ./development/idp-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
+
     env_file:
       - ./common.env
       - ./local.env
+    environment:
+      - ADMIN_EMAIL=john_doe@there.com
+      - ADMIN_PASS=a
+      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECURE_COOKIE=false
+      - SHOW_SAML_ERRORS=true
     command: ["/data/run-dev.sh"]
 
-  tests:
+  sp:
     image: silintl/ssp-base:develop
+    volumes:
+      # Utilize custom certs
+      - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
+
+      # Utilize custom configs
+      - ./development/sp-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
+      - ./development/sp-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
+
+      # Utilize custom metadata
+      - ./development/sp-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
+    ports:
+      - "8081:80"
+    environment:
+      - ADMIN_EMAIL=john_doe@there.com
+      - ADMIN_PASS=sp1
+      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz1
+      - SECURE_COOKIE=false
+      - SHOW_SAML_ERRORS=true
+      - SAML20_IDP_ENABLE=false
+      - ADMIN_PROTECT_INDEX_PAGE=false
+
+  tests:
+    image: silintl/ssp-base:feature_add-expirychecker
     volumes_from:
-      - web
+      - idp
     volumes:
       - ./composer.json:/data/composer.json
       - ./composer.lock:/data/composer.lock
