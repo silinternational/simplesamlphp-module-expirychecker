@@ -23,7 +23,7 @@ Example:
         'class' => 'expirychecker:ExpiryDate',
         'netid_attr' => 'eduPersonPrincipalName',
         'expirydate_attr' => 'schacExpiryDate',
-        'warndaysbefore' => '60',
+        'warndaysbefore' => 60,
         'date_format' => 'd.m.Y',
     ),
 
