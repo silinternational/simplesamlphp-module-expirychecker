@@ -6,7 +6,7 @@
  * Based on preprodwarning module by rnd.feide.no
  *
  * <code>
- * // show about2xpire warning or deny access if netid is expired
+ * // show about2expire warning or deny access if netid is expired
  * 17 => array(
  *     'class' => 'expirychecker:ExpiryDate',
  *     'netid_attr' => 'cn',
@@ -208,7 +208,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     
     /**
      * Redirect the user to the change password url if they haven't gone
-     *   their in the last 10 minutes
+     *   there in the last 10 minutes
      * @param array $state
      * @param string $netId
      * @param string $changePwdUrl
@@ -226,11 +226,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $ignoreMinutes = 60;
 
         $session = SimpleSAML_Session::getInstance();     
-        $iidpExpirySession = $session->getData($sessionType,$change_pwd_session);
+        $idpExpirySession = $session->getData($sessionType,$change_pwd_session);
         
         // If the session shows that the User already passed this way,
         //  don't redirect to change password page
-        if ($iidpExpirySession !== Null) {
+        if ($idpExpirySession !== Null) {
             SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
         } else {
             // Otherwise, set a value to tell us they've probably changed
@@ -242,7 +242,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         
         
        //   If state already has the change password url, go straight there to 
-       //   avoid eternal loop between that and the iidp
+       //   avoid eternal loop between that and the idp
         if (array_key_exists('saml:RelayState', $state)) {
             $relayState = $state['saml:RelayState'];
             if (strpos($relayState, $changePwdUrl) !==false) {                
