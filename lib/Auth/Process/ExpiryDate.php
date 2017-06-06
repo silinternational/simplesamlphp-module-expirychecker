@@ -8,7 +8,7 @@
  * <code>
  * // show about2xpire warning or deny access if netid is expired
  * 17 => array(
- *     'class' => 'iidpexpirycheck:ExpiryDate',
+ *     'class' => 'expirychecker:ExpiryDate',
  *     'netid_attr' => 'cn',
  *     'expirydate_attr' => 'pwdExpiryTime',
  *     'warndaysbefore' => 21,
@@ -25,7 +25,7 @@
  * @version $Id$
  */
 
-class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter {
+class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter {
 
     private $warndaysbefore = 0;
     private $redirectdaysbefore = 0;
@@ -53,7 +53,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             if (!is_int($this->warndaysbefore)) {
                 throw new Exception('Invalid value for number of seconds for ' . 
                                     'pwdGraceAuthNLimit given to ' . 
-                                    'iidpexpirycheck::ExpiryDate filter.');
+                                    'expirychecker::ExpiryDate filter.');
             }
         } else {
             $this->pwdGraceAuthNLimit = 0;
@@ -63,7 +63,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             $this->warndaysbefore = $config['warndaysbefore'];
             if (!is_int($this->warndaysbefore)) {
                 throw new Exception('Invalid value for number of days ' . 
-                                    'given to iidpexpirycheck::ExpiryDate filter.');
+                                    'given to expirychecker::ExpiryDate filter.');
             }
         } else {
             $this->warndaysbefore = 0;
@@ -73,7 +73,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             $this->redirectdaysbefore = $config['redirectdaysbefore'];
             if (!is_int($this->redirectdaysbefore)) {
                 throw new Exception('Invalid value for the redirect threshold ' . 
-                                    'days given to iidpexpirycheck::ExpiryDate filter.');
+                                    'days given to expirychecker::ExpiryDate filter.');
             }
         } else {
             $this->redirectdaysbefore = 0;
@@ -84,7 +84,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             if (!is_string($this->original_url_param)) {
                 throw new Exception('Invalid paramater name for the ' . 
                                     'original url provided to ' . 
-                                    'iidpexpirycheck::ExpiryDate filter.');
+                                    'expirychecker::ExpiryDate filter.');
             }
         }
 
@@ -92,7 +92,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             $this->changepwdurl = $config['changepwdurl'];
             if (!is_string($this->changepwdurl)) {
                 throw new Exception('Invalid password change URL provided to ' . 
-                                    'iidpexpirycheck::ExpiryDate filter.');
+                                    'expirychecker::ExpiryDate filter.');
             }
         }
 
@@ -101,7 +101,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             if (!is_string($this->netid_attr)) {
                 throw new Exception('Invalid attribute name given as ' . 
                                     'eduPersonPrincipalName to ' . 
-                                    'iidpexpirycheck::ExpiryDate filter.');
+                                    'expirychecker::ExpiryDate filter.');
             }
         }
 
@@ -109,7 +109,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             $this->expirydate_attr = $config['expirydate_attr'];
             if (!is_string($this->expirydate_attr)) {
                 throw new Exception('Invalid attribute name given as ExpiryDate ' . 
-                                    'to iidpexpirycheck::ExpiryDate filter.');
+                                    'to expirychecker::ExpiryDate filter.');
             }
         }
 
@@ -117,7 +117,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             $this->date_format = $config['date_format'];
             if (!is_string($this->date_format)) {
                 throw new Exception('Invalid date format given to ' . 
-                                    'iidpexpirycheck::ExpiryDate filter.');
+                                    'expirychecker::ExpiryDate filter.');
             }
         }
     }
@@ -191,7 +191,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
         $hardExpireDate = $this->expireOnDate + $this->pwdGraceAuthNLimit;        
         
         if (self::isDateInPast($hardExpireDate)) {
-            SimpleSAML_Logger::error('iidpexpirycheck: NetID ' . $netId .
+            SimpleSAML_Logger::error('expirychecker: NetID ' . $netId .
                                      ' has expired [' . 
                                      date($this->date_format, $this->expireOnDate) . 
                                      ']. Access denied!');
@@ -201,7 +201,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
             $state['netId'] = $netId;
             $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
-            $url = SimpleSAML_Module::getModuleURL('iidpexpirycheck/expired.php');
+            $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
             SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
         }        
     }
@@ -217,7 +217,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
     public function redirect2PasswordChange(&$state, $netId,
                                             $changePwdUrl, $change_pwd_session) {
                         
-        $sessionType = 'iidpexpirycheck';
+        $sessionType = 'expirychecker';
         /* Save state and redirect. */
         $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
         $state['netId'] = $netId;
@@ -249,7 +249,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
                 SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
         // otherwise add the original destination url as a parameter
             } else {
-                $returnTo = sspmod_iidpexpirycheck_Utilities::getUrlFromRelayState(
+                $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
                                                                         $relayState);
                 if ($returnTo) {                                 
                     $changePwdUrl = $changePwdUrl . "?returnTo=" . $returnTo;
@@ -257,7 +257,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
             }
         }
 
-        SimpleSAML_Logger::warning('iidpexpirycheck: NetID ' . $netId .
+        SimpleSAML_Logger::warning('expirychecker: NetID ' . $netId .
                                    ' is about to expire, redirecting to ' .
                                    $changePwdUrl);
 
@@ -285,7 +285,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
         // to the change password page, then don't redirect them again.
         $change_pwd_session = 'sent_to_change_password';
         $session = SimpleSAML_Session::getInstance();
-        $expiry_data = $session->getDataOfType('iidpexpirycheck');
+        $expiry_data = $session->getDataOfType('expirychecker');
 
         if (array_key_exists($change_pwd_session, $expiry_data)) {
             SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
@@ -305,7 +305,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
               return;
             }
 
-            SimpleSAML_Logger::warning('iidpexpirycheck: NetID ' . $netId .
+            SimpleSAML_Logger::warning('expirychecker: NetID ' . $netId .
                                        ' is about to expire!');
 
             /* Save state and redirect. */
@@ -314,7 +314,7 @@ class sspmod_iidpexpirycheck_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Pro
                               $state['changepwdurl'] = $this->changepwdurl;
             $state['original_url_param'] = $this->original_url_param;
             $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
-            $url = SimpleSAML_Module::getModuleURL('iidpexpirycheck/about2expire.php');
+            $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
             SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
         }
     }

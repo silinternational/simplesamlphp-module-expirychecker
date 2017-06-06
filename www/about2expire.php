@@ -7,7 +7,7 @@
  * @version $Id$
  */
 
-SimpleSAML_Logger::info('iidpexpirycheck - User has been warned that NetID is near to expirational date.');
+SimpleSAML_Logger::info('expirychecker - User has been warned that NetID is near to expirational date.');
 
 if (!array_key_exists('StateId', $_REQUEST)) {
     throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
@@ -43,7 +43,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
               'expirywarning:about2expire');
         $stateId = "StateId=" . $id;
       
-        $returnTo = sspmod_iidpexpirycheck_Utilities::getUrlFromRelayState(
+        $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
                                                     $state['saml:RelayState']);
         if ($returnTo) {                                 
             $changePwdUrl = $changePwdUrl . "?returnTo=" . $returnTo;
@@ -55,7 +55,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
     
     // set a value to tell us they've probably changed
     // their password, in order to allow password to get propagated
-    $session->setData('iidpexpirycheck', $change_pwd_session, 1, (60*10));
+    $session->setData('expirychecker', $change_pwd_session, 1, (60*10));
     $session->saveSession();
     SimpleSAML_Utilities::redirect($changePwdUrl, array());
 }
@@ -63,8 +63,8 @@ if (array_key_exists('changepwd', $_REQUEST)) {
 
 $globalConfig = SimpleSAML_Configuration::getInstance();
 
-$t = new SimpleSAML_XHTML_Template($globalConfig, 'iidpexpirycheck:about2expire.php');
-$t->data['formTarget'] = SimpleSAML_Module::getModuleURL('iidpexpirycheck/about2expire.php');
+$t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:about2expire.php');
+$t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
 $t->data['formData'] = array('StateId' => $id);
 $t->data['daysleft'] = $state['daysleft'];
 $t->data['expireOnDate'] = $state['expireOnDate'];

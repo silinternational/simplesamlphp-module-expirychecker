@@ -1,5 +1,5 @@
 <?php
-class sspmod_iidpexpirycheck_Utilities {
+class sspmod_expirychecker_Utilities {
 
   /**
   * Expects three strings for a url and what marks out the beginning

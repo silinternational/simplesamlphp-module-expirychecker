@@ -16,11 +16,11 @@
 
 # netid will expire today
 if ($this->data['daysleft'] == 0) {
-  $this->data['header'] = $this->t('{iidpexpirycheck:warning:warning_header_today}', array(
+  $this->data['header'] = $this->t('{expirychecker:warning:warning_header_today}', array(
         '%NETID%' => htmlspecialchars($this->data['netId'])
       ));
   
-  $warning = $this->t('{iidpexpirycheck:warning:warning_today}', array(
+  $warning = $this->t('{expirychecker:warning:warning_today}', array(
         '%NETID%' => htmlspecialchars($this->data['netId'])
       ));
 
@@ -28,15 +28,15 @@ if ($this->data['daysleft'] == 0) {
 # netid will expire in one day
 elseif ($this->data['daysleft'] == 1) {
 
-  $this->data['header'] = $this->t('{iidpexpirycheck:warning:warning_header}', array(
+  $this->data['header'] = $this->t('{expirychecker:warning:warning_header}', array(
         '%NETID%' => htmlspecialchars($this->data['netId']),
-        '%DAYS%' => $this->t('{iidpexpirycheck:warning:day}'),
+        '%DAYS%' => $this->t('{expirychecker:warning:day}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
   
-  $warning = $this->t('{iidpexpirycheck:warning:warning}', array(
+  $warning = $this->t('{expirychecker:warning:warning}', array(
         '%NETID%' => htmlspecialchars($this->data['netId']),
-        '%DAYS%' => $this->t('{iidpexpirycheck:warning:day}'),
+        '%DAYS%' => $this->t('{expirychecker:warning:day}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
 
@@ -44,26 +44,26 @@ elseif ($this->data['daysleft'] == 1) {
 # netid has already expired
 elseif ($this->data['daysleft'] < 0) {
 
-  $this->data['header'] = $this->t('{iidpexpirycheck:warning:warning_header_past}', array(
+  $this->data['header'] = $this->t('{expirychecker:warning:warning_header_past}', array(
         '%NETID%' => htmlspecialchars($this->data['netId']),
       ));
   
-  $warning = $this->t('{iidpexpirycheck:warning:warning_past}', array(
+  $warning = $this->t('{expirychecker:warning:warning_past}', array(
         '%NETID%' => htmlspecialchars($this->data['netId']),
       ));
 
 }
 # netid will expire in next <daysleft> days
 else {
-  $this->data['header'] = $this->t('{iidpexpirycheck:warning:warning_header}', array(
+  $this->data['header'] = $this->t('{expirychecker:warning:warning_header}', array(
         '%NETID%' => htmlspecialchars($this->data['netId']),
-        '%DAYS%' => $this->t('{iidpexpirycheck:warning:days}'),
+        '%DAYS%' => $this->t('{expirychecker:warning:days}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
   
-  $warning = $this->t('{iidpexpirycheck:warning:warning}', array(
+  $warning = $this->t('{expirychecker:warning:warning}', array(
         '%NETID%' => htmlspecialchars($this->data['netId']),
-        '%DAYS%' => $this->t('{iidpexpirycheck:warning:days}'),
+        '%DAYS%' => $this->t('{expirychecker:warning:days}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
 
@@ -78,7 +78,7 @@ $this->includeAtTemplateBase('includes/header.php');
 ?>
 
 <h3><?php echo $warning; ?></h3>
-<p><?php echo $this->t('{iidpexpirycheck:warning:expiry_date_text}') . " " . $this->data['expireOnDate']; ?></p>
+<p><?php echo $this->t('{expirychecker:warning:expiry_date_text}') . " " . $this->data['expireOnDate']; ?></p>
 
 
 <form style="display: inline; margin: 0px; padding: 0px" action="<?php echo htmlspecialchars($this->data['formTarget']); ?>">
@@ -90,7 +90,7 @@ $this->includeAtTemplateBase('includes/header.php');
                 }
         ?>
 
-    <input type="submit" name="changepwd" id="send" style="width:170px;" value="<?php echo htmlspecialchars($this->t('{iidpexpirycheck:warning:password_change_title}')) ?>" />
+    <input type="submit" name="changepwd" id="send" style="width:170px;" value="<?php echo htmlspecialchars($this->t('{expirychecker:warning:password_change_title}')) ?>" />
 
 </form>         
 
@@ -102,7 +102,7 @@ $this->includeAtTemplateBase('includes/header.php');
       echo('<input type="hidden" name="' . htmlspecialchars($name) . '" value="' . htmlspecialchars($value) . '" />');
     }
   ?>
-  <input type="submit" name="continue" id="send" style="width:250px; border:0" value="<?php echo htmlspecialchars($this->t('{iidpexpirycheck:warning:btn_continue}')) ?>" />
+  <input type="submit" name="continue" id="send" style="width:250px; border:0" value="<?php echo htmlspecialchars($this->t('{expirychecker:warning:btn_continue}')) ?>" />
 
 </form>
 <br>
