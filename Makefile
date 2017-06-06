@@ -3,7 +3,7 @@
 start: web
 
 bash:
-	docker-compose run --rm web bash
+	docker-compose run --rm idp bash
 
 bashtests:
 	docker-compose run --rm tests bash
@@ -28,7 +28,7 @@ composerupdate:
 	docker-compose run --rm tests bash -c "composer update --no-scripts"
 
 enabledebug:
-	docker-compose exec web bash -c "/data/enable-debug.sh"
+	docker-compose exec idp bash -c "/data/enable-debug.sh"
 
 ps:
 	docker-compose ps
@@ -36,4 +36,4 @@ ps:
 #test: composer behat
 
 web:
-	docker-compose up -d web
+	docker-compose up -d idp sp
