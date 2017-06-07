@@ -284,7 +284,17 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
         $expiryDateString = $this->getAttribute($this->expirydate_attr, $state);
         
-        $this->expireOnDate = strtotime($expiryDateString) ?: null;
+        // Ensure that EVERY user login provides a usable password expiration date.
+        $expiryTimestamp = strtotime($expiryDateString) ?: null;
+        if (empty($expiryTimestamp)) {
+            throw new Exception(sprintf(
+                "We could not understand the expiration date for the user's "
+                . "password (%s), so we do not know whether their password is "
+                . "still valid.",
+                var_export($expiryDateString, true)
+            ), 1496843359);
+        }
+        $this->expireOnDate = $expiryTimestamp;
         
         $this->redirectIfExpired($state, $accountName);      
 
