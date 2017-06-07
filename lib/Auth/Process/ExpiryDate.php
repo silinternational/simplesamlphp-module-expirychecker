@@ -35,7 +35,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         
         if (array_key_exists('pwdGraceAuthNLimit', $config)) {
             $this->pwdGraceAuthNLimit = $config['pwdGraceAuthNLimit'];
-            if ( ! is_int($this->warndaysbefore)) {
+            if ( ! is_int($this->pwdGraceAuthNLimit)) {
                 throw new Exception(sprintf(
                     'Invalid value for number of seconds (%s) for '
                     . 'pwdGraceAuthNLimit given to expirychecker::ExpiryDate '
