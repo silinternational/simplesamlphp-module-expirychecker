@@ -12,12 +12,12 @@ use Sil\Psr3Adapters\Psr3SamlLogger;
  */
 class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
 {
-    private $warndaysbefore = 0;
+    private $warndaysbefore = 14;
     private $original_url_param = 'originalurl';
     private $changepwdurl = NULL;
     private $accountNameAttr = NULL;
     private $expirydate_attr = NULL;
-    private $date_format = 'd.m.Y';
+    private $date_format = 'Y-m-d';
     
     /** @var LoggerInterface */
     protected $logger;
