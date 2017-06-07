@@ -18,7 +18,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $accountNameAttr = NULL;
     private $expirydate_attr = NULL;
     private $date_format = 'd.m.Y';
-    private $expireOnDate = NULL;
     private $pwdGraceAuthNLimit = 0;
     
     /**
@@ -206,24 +205,24 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * @param array $state
      * @param string $accountName
      */     
-    public function redirectIfExpired(&$state, $accountName) {
-     
-        $hardExpireDate = $this->expireOnDate + $this->pwdGraceAuthNLimit;        
+    public function redirectIfExpired(&$state, $accountName, $expiryTimestamp)
+    {
+        $hardExpireDate = $expiryTimestamp + $this->pwdGraceAuthNLimit;
         
         if (self::isDateInPast($hardExpireDate)) {
             SimpleSAML_Logger::error('expirychecker: Password for ' . $accountName .
                                      ' has expired [' . 
-                                     date($this->date_format, $this->expireOnDate) . 
+                                     date($this->date_format, $expiryTimestamp) .
                                      ']. Access denied!');
             $globalConfig = SimpleSAML_Configuration::getInstance();
 
             /* Save state and redirect. */
-            $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
+            $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
             $state['accountName'] = $accountName;
             $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
             $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
             SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
-        }        
+        }
     }
     
     /**
@@ -234,12 +233,16 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * @param string $changePwdUrl
      * @param string $change_pwd_session
      */
-    public function redirect2PasswordChange(&$state, $accountName,
-                                            $changePwdUrl, $change_pwd_session) {
-                        
+    public function redirect2PasswordChange(
+        &$state,
+        $accountName,
+        $changePwdUrl,
+        $change_pwd_session,
+        $expiryTimestamp
+    ) {
         $sessionType = 'expirychecker';
         /* Save state and redirect. */
-        $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
+        $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
         $state['accountName'] = $accountName;
         $id = SimpleSAML_Auth_State::saveState($state,
             'expirywarning:redirected_to_password_change_url');
@@ -296,9 +299,8 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         // Get the necessary info from the state data.
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
         $expiryTimestamp = $this->getExpiryTimestamp($this->expirydate_attr, $state);
-        $this->expireOnDate = $expiryTimestamp;
         
-        $this->redirectIfExpired($state, $accountName);      
+        $this->redirectIfExpired($state, $accountName, $expiryTimestamp);      
 
         // If we set a special session value to say they've already been redirected
         // to the change password page, then don't redirect them again.
@@ -316,12 +318,13 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                 $state,
                 $accountName,
                 $this->changepwdurl,
-                $change_pwd_session
+                $change_pwd_session,
+                $expiryTimestamp
             );
         }
 
         // Display a password expiration warning page if it's time to do so.
-        if ($this->isTimeToWarn($this->expireOnDate, $this->warndaysbefore)) {
+        if ($this->isTimeToWarn($expiryTimestamp, $this->warndaysbefore)) {
             
             $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
             $state['daysleft'] = $daysLeft;
@@ -336,7 +339,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                                        ' is about to expire!');
 
             /* Save state and redirect. */
-            $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
+            $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
             $state['accountName'] = $accountName;
                               $state['changepwdurl'] = $this->changepwdurl;
             $state['original_url_param'] = $this->original_url_param;
