@@ -40,8 +40,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                                     'pwdGraceAuthNLimit given to ' . 
                                     'expirychecker::ExpiryDate filter.');
             }
-        } else {
-            $this->pwdGraceAuthNLimit = 0;
         }
 
         if (array_key_exists('warndaysbefore', $config)) {
@@ -53,8 +51,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                     var_export($this->warndaysbefore, true)
                 ), 1496770709);
             }
-        } else {
-            $this->warndaysbefore = 0;
         }
 
         if (array_key_exists('redirectdaysbefore', $config)) {
@@ -63,8 +59,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                 throw new Exception('Invalid value for the redirect threshold ' . 
                                     'days given to expirychecker::ExpiryDate filter.');
             }
-        } else {
-            $this->redirectdaysbefore = 0;
         }
         
         if (array_key_exists('original_url_param', $config)) {
