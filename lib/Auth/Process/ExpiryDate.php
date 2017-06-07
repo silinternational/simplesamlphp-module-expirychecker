@@ -145,19 +145,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
     
     /**
-     *  Check if given date is older than today
-     *  @param time $checkDate
-     *  @return bool
+     * See if the given timestamp is in the past.
      *
+     * @param int $timestamp The timestamp to check.
+     * @return bool
      */
-    public function isDateInPast($checkDate) {
-        $now = time();
-
-        if ($now > $checkDate) {
-          return true;
-        } else {
-          return false;
-        }
+    public function isDateInPast(int $timestamp)
+    {
+        return ($timestamp < time());
     }    
     
     /**
