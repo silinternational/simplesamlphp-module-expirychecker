@@ -201,31 +201,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
 
     /**
-     * Redirect the user to the expired-password page.
-     *
-     * @param array $state The state data.
-     * @param string $accountName The name of the user account.
-     * @param int $expiryTimestamp When the password expired.
-     */
-    public function redirectToExpiredPage(&$state, $accountName, $expiryTimestamp)
-    {
-        $expireOnDate = date($this->date_format, $expiryTimestamp);
-        $this->logger->error(sprintf(
-            'expirychecker: Password for %s has expired [%s]. Access denied!',
-            $accountName,
-            $expireOnDate
-        ));
-        $globalConfig = SimpleSAML_Configuration::getInstance();
-
-        /* Save state and redirect. */
-        $state['expireOnDate'] = $expireOnDate;
-        $state['accountName'] = $accountName;
-        $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
-        $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
-        SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
-    }
-    
-    /**
      * Redirect the user to the change password url if they haven't gone
      *   there in the last 10 minutes
      * @param array $state
@@ -329,6 +304,31 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         if ($this->isTimeToWarn($expiryTimestamp, $this->warndaysbefore)) {
             $this->redirectToWarningPage($state, $accountName, $expiryTimestamp);
         }
+    }
+    
+    /**
+     * Redirect the user to the expired-password page.
+     *
+     * @param array $state The state data.
+     * @param string $accountName The name of the user account.
+     * @param int $expiryTimestamp When the password expired.
+     */
+    public function redirectToExpiredPage(&$state, $accountName, $expiryTimestamp)
+    {
+        $expireOnDate = date($this->date_format, $expiryTimestamp);
+        $this->logger->error(sprintf(
+            'expirychecker: Password for %s has expired [%s]. Access denied!',
+            $accountName,
+            $expireOnDate
+        ));
+        $globalConfig = SimpleSAML_Configuration::getInstance();
+
+        /* Save state and redirect. */
+        $state['expireOnDate'] = $expireOnDate;
+        $state['accountName'] = $accountName;
+        $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
+        $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
+        SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }
     
     /**
