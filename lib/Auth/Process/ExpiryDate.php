@@ -107,6 +107,28 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
     
     /**
+     * Get the specified attribute from the given state data.
+     *
+     * NOTE: If the attribute's data is an array, the first value will be
+     *       returned. Otherwise, the attribute's data will simply be returned
+     *       as-is.
+     *
+     * @param string $attributeName The name of the attribute.
+     * @param array $state The state data.
+     * @return mixed The attribute value, or null if not found.
+     */
+    protected function getAttribute($attributeName, $state)
+    {
+        $attributeData = $state['Attributes'][$attributeName] ?? null;
+        
+        if (is_array($attributeData)) {
+            return $attributeData[0] ?? null;
+        }
+        
+        return $attributeData;
+    }
+    
+    /**
      *  Check if given date is older than today
      *  @param time $checkDate
      *  @return bool
@@ -257,11 +279,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      */
     public function process(&$state)
     {
-        /*
-         * UTC format: 20090527080352Z
-         */
-        $accountName = $state['Attributes'][$this->accountNameAttr][0];
-        $this->expireOnDate = strtotime($state['Attributes'][$this->expirydate_attr][0]);
+        // Get the necessary info from the state data.
+        $accountName = $this->getAttribute($this->accountNameAttr, $state);
+        $expiryDateString = $this->getAttribute($this->expirydate_attr, $state);
+        
+        $this->expireOnDate = strtotime($expiryDateString) ?: null;
         $changePwdUrl = $this->changepwdurl;
         
         self::redirectIfExpired($state, $accountName);      
