@@ -13,7 +13,6 @@ use SimpleSAML_Auth_ProcessingFilter;
 class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
 {
     private $warndaysbefore = 0;
-    private $redirectdaysbefore = 0;
     private $original_url_param = 'originalurl';
     private $changepwdurl = NULL;
     private $accountNameAttr = NULL;
@@ -54,14 +53,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                     . 'expirychecker::ExpiryDate filter.',
                     var_export($this->warndaysbefore, true)
                 ), 1496770709);
-            }
-        }
-
-        if (array_key_exists('redirectdaysbefore', $config)) {
-            $this->redirectdaysbefore = $config['redirectdaysbefore'];
-            if (!is_int($this->redirectdaysbefore)) {
-                throw new Exception('Invalid value for the redirect threshold ' . 
-                                    'days given to expirychecker::ExpiryDate filter.');
             }
         }
         
@@ -171,23 +162,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
 
     /**
-     * Check if it's time to redirect the user to the change password page
-     *   based on whether the remaining days is equal or under defined $redirectdaysbefore
-     * @param array $state
-     * @return bool
+     * Check whether it's time to require the user to change their password.
      *
+     * @param int $expiryTimestamp
+     * @return bool
      */
-    public function isTimeToChangePassword(&$state) {
-      #date_default_timezone_set('Europe/Ljubljana');
-      $now = time();
-      $end = $this->expireOnDate;
-
-      $days = (int)(($end - $now) / (24*60*60));
-      if ($days <= $this->redirectdaysbefore) {
-          return true;
-      }
-
-      return false;
+    public function isTimeToChangePassword(int $expiryTimestamp)
+    {
+        return $this->isDateInPast($expiryTimestamp);
     }
     
     /**
@@ -312,8 +294,8 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
         }
 
-        // Redirect the user to the change password URL if it's time.
-        if (self::isTimeToChangePassword($state)) {
+        // Redirect the user to the change password URL if it's time to do so.
+        if ($this->isTimeToChangePassword($expiryTimestamp)) {
             self::redirect2PasswordChange(
                 $state,
                 $accountName,

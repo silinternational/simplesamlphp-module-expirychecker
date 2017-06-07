@@ -28,7 +28,6 @@ Example:
         'date_format' => 'Y-m-d',
         
         // Optional:
-        'redirectdaysbefore' => 7,
         'pwdGraceAuthNLimit' => 60*60*24*30,
         'original_url_param' => 'originalurl',
         'changepwdurl' => 'https://idm.example.com/pwdmgr/',
