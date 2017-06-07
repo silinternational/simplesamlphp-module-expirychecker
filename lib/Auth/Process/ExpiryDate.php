@@ -130,6 +130,21 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
     
     /**
+     * Calculate how many days remain between now and when the password will
+     * expire.
+     *
+     * @param int $expiryTimestamp The timestamp for when the password will
+     *     expire.
+     * @return int The number of days remaining
+     */
+    protected function getDaysLeftBeforeExpiry($expiryTimestamp)
+    {
+        $now = time();
+        $end = $expiryTimestamp;
+        return round(($end - $now) / (24*60*60));
+    }
+    
+    /**
      *  Check if given date is older than today
      *  @param time $checkDate
      *  @return bool
@@ -146,25 +161,18 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }    
     
     /**
-     * Check if it's time to warn user to change their password
-     *  based on whether the remaining days is equal or under 
-     *  the warndaysbefore value.
-     * @param array $state
-     * @return bool
+     * Check whether it's time to warn the user that they will need to change
+     * their password soon.
      *
+     * @param int $expiryTimestamp The timestamp for when the password expires.
+     * @param int $warnDaysBefore How many days before the expiration we should
+     *     warn the user.
+     * @return boolean
      */
-    public function isTimeToWarn(&$state) {
-        #date_default_timezone_set('Europe/Ljubljana');
-        $now = time();
-        $end = $this->expireOnDate;
-        $days = round(($end - $now) / (24*60*60));
-        
-        if ($days <= $this->warndaysbefore) {
-            $state['daysleft'] = $days;
-            return true;
-        }
-        
-        return false;
+    public function isTimeToWarn($expiryTimestamp, $warnDaysBefore)
+    {
+        $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
+        return ($daysLeft <= $warnDaysBefore);
     }
 
     /**
@@ -318,8 +326,12 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             );
         }
 
-        // Display a password expiration warning page if it's time
-        if (self::isTimeToWarn($state)) {
+        // Display a password expiration warning page if it's time to do so.
+        if ($this->isTimeToWarn($this->expireOnDate, $this->warndaysbefore)) {
+            
+            $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
+            $state['daysleft'] = $daysLeft;
+            
             assert('is_array($state)');
             if (isset($state['isPassive']) && $state['isPassive'] === TRUE) {
               /* We have a passive request. Skip the warning. */
