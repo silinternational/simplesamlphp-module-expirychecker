@@ -1,7 +1,5 @@
 <?php
 
-use Exception;
-use SimpleSAML_Auth_ProcessingFilter;
 use Psr\Log\LoggerInterface;
 use Sil\Psr3Adapters\Psr3SamlLogger;
 
