@@ -296,10 +296,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $expiryTimestamp = strtotime($expiryDateString) ?: null;
         if (empty($expiryTimestamp)) {
             throw new Exception(sprintf(
-                "We could not understand the expiration date for the user's "
-                . "password (%s), so we do not know whether their password is "
-                . "still valid.",
-                var_export($expiryDateString, true)
+                "We could not understand the expiration date (%s, from %s) for "
+                . "the user's password, so we do not know whether their "
+                . "password is still valid.",
+                var_export($expiryDateString, true),
+                var_export($this->expirydate_attr, true)
             ), 1496843359);
         }
         $this->expireOnDate = $expiryTimestamp;
