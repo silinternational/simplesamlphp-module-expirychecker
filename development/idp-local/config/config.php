@@ -515,11 +515,16 @@ $config = [
         ],
 
         // Add one to help with testing
-       50 => [
-           'class' => 'core:AttributeAdd',
-           'eduPersonPrincipalName' => 'TEST_ADMIN',
-           'urn:oid:0.9.2342.19200300.100.1.3' => 'test_admin@idp1.org',
-           'uid' => '112266',
+        50 => [
+            'class' => 'core:AttributeAdd',
+            'eduPersonPrincipalName' => ['TEST_ADMIN@ssp-hub-idp.local'],
+            'eduPersonTargetID' => ['123-abc-45678-def-abcdefgi'],
+            'sn' => ['Admin'],
+            'givenName' => ['Test'],
+            'mail' => ['test_admin@example.com'],
+            'employeeNumber' => ['112266'],
+            'cn' => ['TEST_ADMIN'],
+            'schacExpiryDate' => [gmdate('YmdHis\Z', strtotime('+1 day'))],
         ],
         
         // Use the uid value to populate the nameid entry       
