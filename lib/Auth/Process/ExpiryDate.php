@@ -1,6 +1,7 @@
 <?php
 
 use Exception;
+use SimpleSAML_Auth_ProcessingFilter;
 
 /**
  * Filter which either warns the user that their password is "about to expire"
@@ -329,5 +330,3 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         }
     }
 }
-
-?>
