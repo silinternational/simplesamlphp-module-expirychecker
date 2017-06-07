@@ -21,5 +21,5 @@ $metadata['http://ssp-hub-idp.local:8085'] = [
 	 * Authentication source to use. Must be one that is configured in
 	 * 'config/authsources.php'.
 	 */
-	'auth' => 'admin',
+	'auth' => 'example-userpass',
 ];
