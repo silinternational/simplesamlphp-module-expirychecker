@@ -27,7 +27,8 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * @param array $config  Configuration information about this filter.
      * @param mixed $reserved  For future use.
      */
-    public function __construct($config, $reserved) {
+    public function __construct($config, $reserved)
+    {
         parent::__construct($config, $reserved);
 
         assert('is_array($config)');
@@ -45,7 +46,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         if (array_key_exists('warndaysbefore', $config)) {
             $this->warndaysbefore = $config['warndaysbefore'];
-            if (!is_int($this->warndaysbefore)) {
+            if ( ! is_int($this->warndaysbefore)) {
                 throw new Exception(sprintf(
                     'Invalid value for number of days (%s) given to '
                     . 'expirychecker::ExpiryDate filter.',
@@ -65,10 +66,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         } else {
             $this->redirectdaysbefore = 0;
         }
-
+        
         if (array_key_exists('original_url_param', $config)) {
             $this->original_url_param = $config['original_url_param'];
-            if (!is_string($this->original_url_param)) {
+            if ( ! is_string($this->original_url_param)) {
                 throw new Exception('Invalid paramater name for the ' . 
                                     'original url provided to ' . 
                                     'expirychecker::ExpiryDate filter.');
@@ -77,7 +78,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         if (array_key_exists('changepwdurl', $config)) {
             $this->changepwdurl = $config['changepwdurl'];
-            if (!is_string($this->changepwdurl)) {
+            if ( ! is_string($this->changepwdurl)) {
                 throw new Exception('Invalid password change URL provided to ' . 
                                     'expirychecker::ExpiryDate filter.');
             }
@@ -93,7 +94,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         if (array_key_exists('expirydate_attr', $config)) {
             $this->expirydate_attr = $config['expirydate_attr'];
-            if (!is_string($this->expirydate_attr)) {
+            if ( ! is_string($this->expirydate_attr)) {
                 throw new Exception('Invalid attribute name given as ExpiryDate ' . 
                                     'to expirychecker::ExpiryDate filter.');
             }
@@ -101,13 +102,13 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         if (array_key_exists('date_format', $config)) {
             $this->date_format = $config['date_format'];
-            if (!is_string($this->date_format)) {
+            if ( ! is_string($this->date_format)) {
                 throw new Exception('Invalid date format given to ' . 
                                     'expirychecker::ExpiryDate filter.');
             }
         }
     }
-
+    
     /**
      *  Check if given date is older than today
      *  @param time $checkDate
@@ -253,11 +254,12 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     
     
     /**
-     * Apply filter
+     * Apply this AuthProc Filter.
      *
-     * @param array &$state  The current state.
+     * @param array &$state The current state.
      */
-    public function process(&$state) {
+    public function process(&$state)
+    {
         /*
          * UTC format: 20090527080352Z
          */
@@ -277,7 +279,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
         }
 
-        // Redirect the user to the change password URL if it's time
+        // Redirect the user to the change password URL if it's time.
         if (self::isTimeToChangePassword($state)) {
             self::redirect2PasswordChange($state, $accountName, $changePwdUrl, 
                                           $change_pwd_session);
