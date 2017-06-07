@@ -329,11 +329,24 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         // Display a password expiration warning page if it's time to do so.
         if ($this->isTimeToWarn($expiryTimestamp, $this->warndaysbefore)) {
-            
+            $this->redirectToWarningPage($state, $accountName, $expiryTimestamp);
+        }
+    }
+    
+    /**
+     * Redirect the user to the warning page.
+     *
+     * @param array $state The state data.
+     * @param string $accountName The name of the user account.
+     * @param int $expiryTimestamp When the password will expire.
+     */
+    protected function redirectToWarningPage(&$state, $accountName, $expiryTimestamp)
+    {
+            assert('is_array($state)');
+
             $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
             $state['daysleft'] = $daysLeft;
-            
-            assert('is_array($state)');
+
             if (isset($state['isPassive']) && $state['isPassive'] === TRUE) {
               /* We have a passive request. Skip the warning. */
               return;
@@ -352,6 +365,5 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
             $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
             SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
-        }
     }
 }
