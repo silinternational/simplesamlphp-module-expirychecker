@@ -285,7 +285,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         
         $this->expireOnDate = strtotime($expiryDateString) ?: null;
         
-        self::redirectIfExpired($state, $accountName);      
+        $this->redirectIfExpired($state, $accountName);      
 
         // If we set a special session value to say they've already been redirected
         // to the change password page, then don't redirect them again.
