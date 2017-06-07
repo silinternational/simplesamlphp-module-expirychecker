@@ -28,7 +28,6 @@ Example:
         'date_format' => 'Y-m-d',
         
         // Optional:
-        'pwdGraceAuthNLimit' => 60*60*24*30,
         'original_url_param' => 'originalurl',
         'changepwdurl' => 'https://idm.example.com/pwdmgr/',
         'date_format' => 'm.d.Y', // Use PHP's date syntax.

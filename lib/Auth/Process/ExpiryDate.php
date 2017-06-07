@@ -20,7 +20,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $accountNameAttr = NULL;
     private $expirydate_attr = NULL;
     private $date_format = 'd.m.Y';
-    private $pwdGraceAuthNLimit = 0;
     
     /** @var LoggerInterface */
     protected $logger;
@@ -34,21 +33,9 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     public function __construct($config, $reserved)
     {
         parent::__construct($config, $reserved);
-
+        
         assert('is_array($config)');
         
-        if (array_key_exists('pwdGraceAuthNLimit', $config)) {
-            $this->pwdGraceAuthNLimit = $config['pwdGraceAuthNLimit'];
-            if ( ! is_int($this->pwdGraceAuthNLimit)) {
-                throw new Exception(sprintf(
-                    'Invalid value for number of seconds (%s) for '
-                    . 'pwdGraceAuthNLimit given to expirychecker::ExpiryDate '
-                    . 'filter.',
-                    var_export($this->pwdGraceAuthNLimit, true)
-                ), 1496782703);
-            }
-        }
-
         $this->initLogger($config['logger'] ?? []);
         
         if (array_key_exists('warndaysbefore', $config)) {
