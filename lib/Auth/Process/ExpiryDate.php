@@ -32,6 +32,8 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         parent::__construct($config, $reserved);
         
+        $this->initComposerAutoloader();
+        
         assert('is_array($config)');
         
         $this->initLogger($config['logger'] ?? []);
@@ -154,6 +156,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             ), 1496843359);
         }
         return $expiryTimestamp;
+    }
+    
+    protected function initComposerAutoloader()
+    {
+        $path = __DIR__ . '/../../../vendor/autoload.php';
+        if (file_exists($path)) {
+            require_once $path;
+        }
     }
     
     protected function initLogger($loggerConfig)
