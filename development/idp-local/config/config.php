@@ -494,6 +494,15 @@ $config = [
      * Both Shibboleth and SAML 2.0
      */
     'authproc.idp' => [
+        
+        10 => [
+            'class' => 'expirychecker:ExpiryDate',
+            'accountNameAttr' => 'cn',
+            'expirydate_attr' => 'schacExpiryDate',
+            'warndaysbefore' => 14,
+            'date_format' => 'Y-m-d',
+        ],
+        
         /* Enable the authproc filter below to add URN Prefixces to all attributes
          10 => array(
              'class' => 'core:AttributeMap', 'addurnprefix'
