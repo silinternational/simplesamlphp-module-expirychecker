@@ -342,28 +342,28 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      */
     protected function redirectToWarningPage(&$state, $accountName, $expiryTimestamp)
     {
-            assert('is_array($state)');
-
-            $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
-            $state['daysleft'] = $daysLeft;
-
-            if (isset($state['isPassive']) && $state['isPassive'] === TRUE) {
-              /* We have a passive request. Skip the warning. */
-              return;
-            }
-
-            $this->logger->warning(sprintf(
-                'expirychecker: Password for %s is about to expire!',
-                var_export($accountName, true)
-            ));
-
-            /* Save state and redirect. */
-            $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
-            $state['accountName'] = $accountName;
-                              $state['changepwdurl'] = $this->changepwdurl;
-            $state['original_url_param'] = $this->original_url_param;
-            $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
-            $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
-            SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
+        assert('is_array($state)');
+        
+        $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
+        $state['daysleft'] = $daysLeft;
+        
+        if (isset($state['isPassive']) && $state['isPassive'] === TRUE) {
+          /* We have a passive request. Skip the warning. */
+          return;
+        }
+        
+        $this->logger->warning(sprintf(
+            'expirychecker: Password for %s is about to expire!',
+            var_export($accountName, true)
+        ));
+        
+        /* Save state and redirect. */
+        $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
+        $state['accountName'] = $accountName;
+                          $state['changepwdurl'] = $this->changepwdurl;
+        $state['original_url_param'] = $this->original_url_param;
+        $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
+        $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
+        SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }
 }
