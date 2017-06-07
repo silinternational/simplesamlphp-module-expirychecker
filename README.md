@@ -21,14 +21,15 @@ Example:
 
     10 => array(
         'class' => 'expirychecker:ExpiryDate',
-        'netid_attr' => 'eduPersonPrincipalName',
+        'accountNameAttr' => 'cn',
         'expirydate_attr' => 'schacExpiryDate',
         'warndaysbefore' => 60,
         'date_format' => 'd.m.Y',
     ),
 
-The `netid_attr` parameter represents the (ldap) attribute name which has the 
-user's NetID stored in it.
+The `accountNameAttr` parameter represents the SAML attribute name which has 
+the user's account name stored in it. In certain situations, this will be 
+displayed to the user, as well as being used in log messages.
 
 The `expirydate_attr` parameter represents the (ldap) attribute name which has 
 the user's expiry date, which must be formated as YYYYMMDDHHMMSSZ (e.g. 

@@ -14,55 +14,55 @@
 
 //$this->data['header'] = $this->t('{expirychecker:warning:warning_header}');
 
-# netid will expire today
+// Expires today:
 if ($this->data['daysleft'] == 0) {
   $this->data['header'] = $this->t('{expirychecker:warning:warning_header_today}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId'])
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName'])
       ));
   
   $warning = $this->t('{expirychecker:warning:warning_today}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId'])
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName'])
       ));
 
 }
-# netid will expire in one day
+// Expires tomorrow:
 elseif ($this->data['daysleft'] == 1) {
 
   $this->data['header'] = $this->t('{expirychecker:warning:warning_header}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId']),
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName']),
         '%DAYS%' => $this->t('{expirychecker:warning:day}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
   
   $warning = $this->t('{expirychecker:warning:warning}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId']),
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName']),
         '%DAYS%' => $this->t('{expirychecker:warning:day}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
 
 }
-# netid has already expired
+// Has already expired:
 elseif ($this->data['daysleft'] < 0) {
 
   $this->data['header'] = $this->t('{expirychecker:warning:warning_header_past}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId']),
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName']),
       ));
   
   $warning = $this->t('{expirychecker:warning:warning_past}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId']),
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName']),
       ));
 
 }
-# netid will expire in next <daysleft> days
+// Will expire in <daysleft> days:
 else {
   $this->data['header'] = $this->t('{expirychecker:warning:warning_header}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId']),
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName']),
         '%DAYS%' => $this->t('{expirychecker:warning:days}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
   
   $warning = $this->t('{expirychecker:warning:warning}', array(
-        '%NETID%' => htmlspecialchars($this->data['netId']),
+        '%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName']),
         '%DAYS%' => $this->t('{expirychecker:warning:days}'),
         '%DAYSLEFT%' => htmlspecialchars($this->data['daysleft']),
       ));
@@ -70,7 +70,7 @@ else {
 
 }
 
-//$this->data['header'] = str_replace("%DAYSLEFT%", $this->data['daysleft'], str_replace("%NETID%", $this->data['netId'], $this->t('{expirychecker:warning:warning_header}')));
+//$this->data['header'] = str_replace("%DAYSLEFT%", $this->data['daysleft'], str_replace("%ACCOUNTNAME%", $this->data['accountName'], $this->t('{expirychecker:warning:warning_header}')));
 $this->data['autofocus'] = 'yesbutton';
 
 $this->includeAtTemplateBase('includes/header.php');

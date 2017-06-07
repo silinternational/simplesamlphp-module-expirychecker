@@ -7,7 +7,7 @@
  * @version $Id$
  */
 
-SimpleSAML_Logger::info('expirychecker - User has been warned that NetID is near to expirational date.');
+SimpleSAML_Logger::info('expirychecker - User has been warned that their password will expire soon.');
 
 if (!array_key_exists('StateId', $_REQUEST)) {
     throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
@@ -68,7 +68,7 @@ $t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/about2ex
 $t->data['formData'] = array('StateId' => $id);
 $t->data['daysleft'] = $state['daysleft'];
 $t->data['expireOnDate'] = $state['expireOnDate'];
-$t->data['netId'] = $state['netId'];
+$t->data['accountName'] = $state['accountName'];
 $t->show();
 
 

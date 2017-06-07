@@ -31,7 +31,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $redirectdaysbefore = 0;
     private $original_url_param = 'originalurl';
     private $changepwdurl = NULL;
-    private $netid_attr = NULL;
+    private $accountNameAttr = NULL;
     private $expirydate_attr = NULL;
     private $date_format = 'd.m.Y';
     private $expireOnDate = NULL;
@@ -99,11 +99,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             }
         }
 
-        if (array_key_exists('netid_attr', $config)) {
-            $this->netid_attr = $config['netid_attr'];
-            if (!is_string($this->netid_attr)) {
-                throw new Exception('Invalid attribute name given as ' . 
-                                    'eduPersonPrincipalName to ' . 
+        if (array_key_exists('accountNameAttr', $config)) {
+            $this->accountNameAttr = $config['accountNameAttr'];
+            if ( ! is_string($this->accountNameAttr)) {
+                throw new Exception('Invalid accountNameAttr given to ' . 
                                     'expirychecker::ExpiryDate filter.');
             }
         }
@@ -187,14 +186,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * Redirect the user to the expired-password page, if it's past
      * the grace period
      * @param array $state
-     * @param string $netId
+     * @param string $accountName
      */     
-    public function redirectIfExpired(&$state, $netId) {
+    public function redirectIfExpired(&$state, $accountName) {
      
         $hardExpireDate = $this->expireOnDate + $this->pwdGraceAuthNLimit;        
         
         if (self::isDateInPast($hardExpireDate)) {
-            SimpleSAML_Logger::error('expirychecker: NetID ' . $netId .
+            SimpleSAML_Logger::error('expirychecker: Password for ' . $accountName .
                                      ' has expired [' . 
                                      date($this->date_format, $this->expireOnDate) . 
                                      ']. Access denied!');
@@ -202,7 +201,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
             /* Save state and redirect. */
             $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
-            $state['netId'] = $netId;
+            $state['accountName'] = $accountName;
             $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
             $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
             SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
@@ -213,17 +212,17 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * Redirect the user to the change password url if they haven't gone
      *   there in the last 10 minutes
      * @param array $state
-     * @param string $netId
+     * @param string $accountName
      * @param string $changePwdUrl
      * @param string $change_pwd_session
      */
-    public function redirect2PasswordChange(&$state, $netId,
+    public function redirect2PasswordChange(&$state, $accountName,
                                             $changePwdUrl, $change_pwd_session) {
                         
         $sessionType = 'expirychecker';
         /* Save state and redirect. */
         $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
-        $state['netId'] = $netId;
+        $state['accountName'] = $accountName;
         $id = SimpleSAML_Auth_State::saveState($state,
             'expirywarning:redirected_to_password_change_url');
         $ignoreMinutes = 60;
@@ -260,7 +259,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             }
         }
 
-        SimpleSAML_Logger::warning('expirychecker: NetID ' . $netId .
+        SimpleSAML_Logger::warning('expirychecker: Password for ' . $accountName .
                                    ' is about to expire, redirecting to ' .
                                    $changePwdUrl);
 
@@ -278,11 +277,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         /*
          * UTC format: 20090527080352Z
          */
-        $netId = $state['Attributes'][$this->netid_attr][0];
+        $accountName = $state['Attributes'][$this->accountNameAttr][0];
         $this->expireOnDate = strtotime($state['Attributes'][$this->expirydate_attr][0]);
         $changePwdUrl = $this->changepwdurl;
         
-        self::redirectIfExpired($state, $netId);      
+        self::redirectIfExpired($state, $accountName);      
 
         // If we set a special session value to say they've already been redirected
         // to the change password page, then don't redirect them again.
@@ -296,7 +295,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         // Redirect the user to the change password URL if it's time
         if (self::isTimeToChangePassword($state)) {
-            self::redirect2PasswordChange($state, $netId, $changePwdUrl, 
+            self::redirect2PasswordChange($state, $accountName, $changePwdUrl, 
                                           $change_pwd_session);
         }
 
@@ -308,12 +307,12 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
               return;
             }
 
-            SimpleSAML_Logger::warning('expirychecker: NetID ' . $netId .
+            SimpleSAML_Logger::warning('expirychecker: Password for ' . $accountName .
                                        ' is about to expire!');
 
             /* Save state and redirect. */
             $state['expireOnDate'] = date($this->date_format, $this->expireOnDate);
-            $state['netId'] = $netId;
+            $state['accountName'] = $accountName;
                               $state['changepwdurl'] = $this->changepwdurl;
             $state['original_url_param'] = $this->original_url_param;
             $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
