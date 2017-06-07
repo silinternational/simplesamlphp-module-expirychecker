@@ -3,7 +3,7 @@
 use Exception;
 use SimpleSAML_Auth_ProcessingFilter;
 use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
+use Sil\Psr3Adapters\Psr3SamlLogger;
 
 /**
  * Filter which either warns the user that their password is "about to expire"
@@ -160,7 +160,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     
     protected function initLogger($loggerConfig)
     {
-        $loggerClass = $loggerConfig['class'] ?? NullLogger::class;
+        $loggerClass = $loggerConfig['class'] ?? Psr3SamlLogger::class;
         $this->logger = new $loggerClass();
     }
     
