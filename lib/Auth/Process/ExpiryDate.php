@@ -284,7 +284,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $expiryDateString = $this->getAttribute($this->expirydate_attr, $state);
         
         $this->expireOnDate = strtotime($expiryDateString) ?: null;
-        $changePwdUrl = $this->changepwdurl;
         
         self::redirectIfExpired($state, $accountName);      
 
@@ -303,7 +302,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             self::redirect2PasswordChange(
                 $state,
                 $accountName,
-                $changePwdUrl,
+                $this->changepwdurl,
                 $change_pwd_session
             );
         }
