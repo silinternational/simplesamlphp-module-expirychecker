@@ -1,32 +1,16 @@
 <?php
 
+use Exception;
+
 /**
- * Filter which shows "about to expire" warning or deny access if netid is expired.
+ * Filter which either warns the user that their password is "about to expire"
+ * (giving them the option of changing it now or later) or tells them that it
+ * has expired (only allowing them to go change their password).
  *
- * Based on preprodwarning module by rnd.feide.no
- *
- * <code>
- * // show about2expire warning or deny access if netid is expired
- * 17 => array(
- *     'class' => 'expirychecker:ExpiryDate',
- *     'netid_attr' => 'cn',
- *     'expirydate_attr' => 'pwdExpiryTime',
- *     'warndaysbefore' => 21,
- *     'redirectdaysbefore' => 7,
- *     'pwdGraceAuthNLimit' => 60*60*24*30,  // added by GTIS
- *     'original_url_param' => 'originalurl',
- *     'changepwdurl' => 'https://idm.example.com/pwdmgr/',
- *     'date_format' => 'm.d.Y', # php date syntax
- * ),
- * </code>
- *
- * @author Alex Mihičinac, ARNES. <alexm@arnes.si>; Modified by Steve Moitozo <steve_moitozo@sil.org>
- * @package simpleSAMLphp
- * @version $Id$
+ * See README.md for sample (and explanation of) expected configuration.
  */
-
-class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter {
-
+class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
+{
     private $warndaysbefore = 0;
     private $redirectdaysbefore = 0;
     private $original_url_param = 'originalurl';
