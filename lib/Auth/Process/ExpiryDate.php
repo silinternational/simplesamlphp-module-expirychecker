@@ -174,6 +174,18 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }    
     
     /**
+     * Check whether the user's password has expired.
+     *
+     * @param int $expiryTimestamp The timestamp for when the user's password
+     *     will expire.
+     * @return bool
+     */
+    public function isExpired(int $expiryTimestamp)
+    {
+        return $this->isDateInPast($expiryTimestamp);
+    }
+    
+    /**
      * Check whether it's time to warn the user that they will need to change
      * their password soon.
      *
@@ -188,18 +200,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         return ($daysLeft <= $warnDaysBefore);
     }
 
-    /**
-     * Check whether the user's password has expired.
-     *
-     * @param int $expiryTimestamp The timestamp for when the user's password
-     *     will expire.
-     * @return bool
-     */
-    public function isExpired(int $expiryTimestamp)
-    {
-        return $this->isDateInPast($expiryTimestamp);
-    }
-    
     /**
      * Redirect the user to the expired-password page.
      *
@@ -288,8 +288,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         SimpleSAML_Utilities::redirect($changePwdUrl, array());
     }
-    
-    
     
     /**
      * Apply this AuthProc Filter.
