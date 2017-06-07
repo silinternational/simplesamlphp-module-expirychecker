@@ -300,8 +300,12 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
 
         // Redirect the user to the change password URL if it's time.
         if (self::isTimeToChangePassword($state)) {
-            self::redirect2PasswordChange($state, $accountName, $changePwdUrl, 
-                                          $change_pwd_session);
+            self::redirect2PasswordChange(
+                $state,
+                $accountName,
+                $changePwdUrl,
+                $change_pwd_session
+            );
         }
 
         // Display a password expiration warning page if it's time
