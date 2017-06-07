@@ -2,6 +2,8 @@
 
 use Exception;
 use SimpleSAML_Auth_ProcessingFilter;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Filter which either warns the user that their password is "about to expire"
@@ -19,6 +21,9 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $expirydate_attr = NULL;
     private $date_format = 'd.m.Y';
     private $pwdGraceAuthNLimit = 0;
+    
+    /** @var LoggerInterface */
+    protected $logger;
     
     /**
      * Initialize this filter.
@@ -44,14 +49,18 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             }
         }
 
+        $this->initLogger($config['logger'] ?? []);
+        
         if (array_key_exists('warndaysbefore', $config)) {
             $this->warndaysbefore = $config['warndaysbefore'];
             if ( ! is_int($this->warndaysbefore)) {
-                throw new Exception(sprintf(
+                $exception = new Exception(sprintf(
                     'Invalid value for number of days (%s) given to '
                     . 'expirychecker::ExpiryDate filter.',
                     var_export($this->warndaysbefore, true)
                 ), 1496770709);
+                $this->logger->critical($exception->getMessage());
+                throw $exception;
             }
         }
         
@@ -160,6 +169,12 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             ), 1496843359);
         }
         return $expiryTimestamp;
+    }
+    
+    protected function initLogger($loggerConfig)
+    {
+        $loggerClass = $loggerConfig['class'] ?? NullLogger::class;
+        $this->logger = new $loggerClass();
     }
     
     /**

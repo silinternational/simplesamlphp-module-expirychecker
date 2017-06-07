@@ -32,6 +32,9 @@ Example:
         'original_url_param' => 'originalurl',
         'changepwdurl' => 'https://idm.example.com/pwdmgr/',
         'date_format' => 'm.d.Y', // Use PHP's date syntax.
+        'logger' => [
+            'class' => '\Sil\Psr3Adapters\Psr3SamlLogger',
+        ],
     ],
 
 The `accountNameAttr` parameter represents the SAML attribute name which has 

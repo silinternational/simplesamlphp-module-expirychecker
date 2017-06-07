@@ -4,6 +4,7 @@
  *
  */
 use Sil\PhpEnv\Env;
+use Sil\Psr3Adapters\Psr3SamlLogger;
 
 /*
  * Get config settings from ENV vars or set defaults
@@ -501,6 +502,9 @@ $config = [
             'expirydate_attr' => 'schacExpiryDate',
             'warndaysbefore' => 14,
             'date_format' => 'Y-m-d',
+            'logger' => [
+                'class' => Psr3SamlLogger::class
+            ],
         ],
         
         /* Enable the authproc filter below to add URN Prefixces to all attributes

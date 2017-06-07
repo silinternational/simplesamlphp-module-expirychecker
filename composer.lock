@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "4bf6d6262d0dae3601ac4422eae8aa1d",
+    "content-hash": "49e457ce62921de6edb282f1f52f3858",
     "packages": [
         {
             "name": "psr/log",
@@ -59,12 +59,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "ccffea64be8575eaa7ad09cd16dfeedfa4711607"
+                "reference": "7cd88c8d4e4e6b483633bb13c35bcec95fd6cd4c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/ccffea64be8575eaa7ad09cd16dfeedfa4711607",
-                "reference": "ccffea64be8575eaa7ad09cd16dfeedfa4711607",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7cd88c8d4e4e6b483633bb13c35bcec95fd6cd4c",
+                "reference": "7cd88c8d4e4e6b483633bb13c35bcec95fd6cd4c",
                 "shasum": ""
             },
             "conflict": {
@@ -106,6 +106,7 @@
                 "magento/magento2ce": ">=2,<2.2",
                 "monolog/monolog": ">=1.8,<1.12",
                 "namshi/jose": "<2.2",
+                "onelogin/php-saml": "<2.10.4",
                 "oro/crm": ">=1.7,<1.7.4",
                 "oro/platform": ">=1.7,<1.7.4",
                 "phpmailer/phpmailer": ">=5,<5.2.22",
@@ -186,7 +187,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2017-05-13T14:02:28+00:00"
+            "time": "2017-06-07T12:12:03+00:00"
         },
         {
             "name": "robrichards/xmlseclibs",
@@ -228,6 +229,53 @@
                 "xmldsig"
             ],
             "time": "2016-09-08T13:31:44+00:00"
+        },
+        {
+            "name": "silinternational/psr3-adapters",
+            "version": "1.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/silinternational/psr3-adapters.git",
+                "reference": "bbaef684f34f94f64dcf018698028b786f67caaa"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/silinternational/psr3-adapters/zipball/bbaef684f34f94f64dcf018698028b786f67caaa",
+                "reference": "bbaef684f34f94f64dcf018698028b786f67caaa",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^5.6 || ^7.0",
+                "psr/log": "^1.0",
+                "roave/security-advisories": "dev-master"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^5.6.1"
+            },
+            "suggest": {
+                "monolog/monolog": "^1.22",
+                "simplesamlphp/simplesamlphp": "^1.14.12",
+                "yiisoft/yii2": "^2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Sil\\Psr3Adapters\\": "src/",
+                    "Sil\\Psr3Adapters\\tests\\": "tests/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Matt Henderson",
+                    "email": "matt_henderson@sil.org"
+                }
+            ],
+            "description": "Various PSR3-compatible logging adapters.",
+            "time": "2017-05-09T19:14:19+00:00"
         },
         {
             "name": "simplesamlphp/saml2",
