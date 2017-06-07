@@ -280,9 +280,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             }
         }
 
-        SimpleSAML_Logger::warning('expirychecker: Password for ' . $accountName .
-                                   ' is about to expire, redirecting to ' .
-                                   $changePwdUrl);
+        $this->logger->warning(sprintf(
+            'expirychecker: Password for %s is about to expire, redirecting to %s',
+            var_export($accountName, true),
+            var_export($changePwdUrl, true)
+        ));
 
         SimpleSAML_Utilities::redirect($changePwdUrl, array());
     }
@@ -337,8 +339,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
               return;
             }
 
-            SimpleSAML_Logger::warning('expirychecker: Password for ' . $accountName .
-                                       ' is about to expire!');
+            $this->logger->warning(sprintf(
+                'expirychecker: Password for %s is about to expire!',
+                var_export($accountName, true)
+            ));
 
             /* Save state and redirect. */
             $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
