@@ -19,8 +19,8 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $expirydate_attr = NULL;
     private $date_format = 'd.m.Y';
     private $expireOnDate = NULL;
-
-
+    private $pwdGraceAuthNLimit = 0;
+    
     /**
      * Initialize this filter.
      *
