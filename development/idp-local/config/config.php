@@ -495,6 +495,19 @@ $config = [
      */
     'authproc.idp' => [
         
+        // Add one to help with testing
+        5 => [
+            'class' => 'core:AttributeAdd',
+            'eduPersonPrincipalName' => ['TEST_ADMIN@ssp-hub-idp.local'],
+            'eduPersonTargetID' => ['123-abc-45678-def-abcdefgi'],
+            'sn' => ['Admin'],
+            'givenName' => ['Test'],
+            'mail' => ['test_admin@example.com'],
+            'employeeNumber' => ['112266'],
+            'cn' => ['TEST_ADMIN'],
+            'schacExpiryDate' => [gmdate('YmdHis\Z', strtotime('+1 day'))],
+        ],
+        
         10 => [
             'class' => 'expirychecker:ExpiryDate',
             'accountNameAttr' => 'cn',
@@ -523,19 +536,6 @@ $config = [
             'type'          => 'saml20-idp-SSO',
         ],
 
-        // Add one to help with testing
-        50 => [
-            'class' => 'core:AttributeAdd',
-            'eduPersonPrincipalName' => ['TEST_ADMIN@ssp-hub-idp.local'],
-            'eduPersonTargetID' => ['123-abc-45678-def-abcdefgi'],
-            'sn' => ['Admin'],
-            'givenName' => ['Test'],
-            'mail' => ['test_admin@example.com'],
-            'employeeNumber' => ['112266'],
-            'cn' => ['TEST_ADMIN'],
-            'schacExpiryDate' => [gmdate('YmdHis\Z', strtotime('+1 day'))],
-        ],
-        
         // Use the uid value to populate the nameid entry       
         60 => [
             'class' => 'saml:AttributeNameID',
