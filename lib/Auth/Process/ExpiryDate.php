@@ -189,40 +189,40 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
 
     /**
-     * Check whether it's time to require the user to change their password.
+     * Check whether the user's password has expired.
      *
-     * @param int $expiryTimestamp
+     * @param int $expiryTimestamp The timestamp for when the user's password
+     *     will expire.
      * @return bool
      */
-    public function isTimeToChangePassword(int $expiryTimestamp)
+    public function isExpired(int $expiryTimestamp)
     {
         return $this->isDateInPast($expiryTimestamp);
     }
     
     /**
-     * Redirect the user to the expired-password page, if it's past
-     * the grace period
-     * @param array $state
-     * @param string $accountName
-     */     
-    public function redirectIfExpired(&$state, $accountName, $expiryTimestamp)
+     * Redirect the user to the expired-password page.
+     *
+     * @param array $state The state data.
+     * @param string $accountName The name of the user account.
+     * @param int $expiryTimestamp When the password expired.
+     */
+    public function redirectToExpiredPage(&$state, $accountName, $expiryTimestamp)
     {
-        $hardExpireDate = $expiryTimestamp + $this->pwdGraceAuthNLimit;
-        
-        if (self::isDateInPast($hardExpireDate)) {
-            SimpleSAML_Logger::error('expirychecker: Password for ' . $accountName .
-                                     ' has expired [' . 
-                                     date($this->date_format, $expiryTimestamp) .
-                                     ']. Access denied!');
-            $globalConfig = SimpleSAML_Configuration::getInstance();
+        $expireOnDate = date($this->date_format, $expiryTimestamp);
+        $this->logger->error(sprintf(
+            'expirychecker: Password for %s has expired [%s]. Access denied!',
+            $accountName,
+            $expireOnDate
+        ));
+        $globalConfig = SimpleSAML_Configuration::getInstance();
 
-            /* Save state and redirect. */
-            $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
-            $state['accountName'] = $accountName;
-            $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
-            $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
-            SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
-        }
+        /* Save state and redirect. */
+        $state['expireOnDate'] = $expireOnDate;
+        $state['accountName'] = $accountName;
+        $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:expired');
+        $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
+        SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }
     
     /**
@@ -300,8 +300,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
         $expiryTimestamp = $this->getExpiryTimestamp($this->expirydate_attr, $state);
         
-        $this->redirectIfExpired($state, $accountName, $expiryTimestamp);      
-
+        if ($this->isExpired($expiryTimestamp)) {
+            $this->redirectToExpiredPage($state, $accountName, $expiryTimestamp);
+        }
+        
         // If we set a special session value to say they've already been redirected
         // to the change password page, then don't redirect them again.
         $change_pwd_session = 'sent_to_change_password';
