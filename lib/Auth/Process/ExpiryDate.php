@@ -136,6 +136,34 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     }
     
     /**
+     * Get the timestamp for when the user's password will expire, throwing an
+     * exception if unable to do so.
+     *
+     * @param string $expirydate_attr The name of the attribute where the
+     *     expiration date (as a string) is stored.
+     * @param array $state The state data.
+     * @return int The expiration timestamp.
+     * @throws Exception
+     */
+    protected function getExpiryTimestamp($expirydate_attr, $state)
+    {
+        $expiryDateString = $this->getAttribute($expirydate_attr, $state);
+        
+        // Ensure that EVERY user login provides a usable password expiration date.
+        $expiryTimestamp = strtotime($expiryDateString) ?: null;
+        if (empty($expiryTimestamp)) {
+            throw new Exception(sprintf(
+                "We could not understand the expiration date (%s, from %s) for "
+                . "the user's password, so we do not know whether their "
+                . "password is still valid.",
+                var_export($expiryDateString, true),
+                var_export($expirydate_attr, true)
+            ), 1496843359);
+        }
+        return $expiryTimestamp;
+    }
+    
+    /**
      * See if the given timestamp is in the past.
      *
      * @param int $timestamp The timestamp to check.
@@ -267,19 +295,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         // Get the necessary info from the state data.
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
-        $expiryDateString = $this->getAttribute($this->expirydate_attr, $state);
-        
-        // Ensure that EVERY user login provides a usable password expiration date.
-        $expiryTimestamp = strtotime($expiryDateString) ?: null;
-        if (empty($expiryTimestamp)) {
-            throw new Exception(sprintf(
-                "We could not understand the expiration date (%s, from %s) for "
-                . "the user's password, so we do not know whether their "
-                . "password is still valid.",
-                var_export($expiryDateString, true),
-                var_export($this->expirydate_attr, true)
-            ), 1496843359);
-        }
+        $expiryTimestamp = $this->getExpiryTimestamp($this->expirydate_attr, $state);
         $this->expireOnDate = $expiryTimestamp;
         
         $this->redirectIfExpired($state, $accountName);      
