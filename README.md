@@ -19,19 +19,27 @@ You will then need to set filter parameters in your config.php file.
 
 Example:
 
-    10 => array(
+    10 => [
+        // Required:
         'class' => 'expirychecker:ExpiryDate',
         'accountNameAttr' => 'cn',
         'expirydate_attr' => 'schacExpiryDate',
-        'warndaysbefore' => 60,
-        'date_format' => 'd.m.Y',
-    ),
+        'warndaysbefore' => 14,
+        'date_format' => 'Y-m-d',
+        
+        // Optional:
+        'redirectdaysbefore' => 7,
+        'pwdGraceAuthNLimit' => 60*60*24*30,
+        'original_url_param' => 'originalurl',
+        'changepwdurl' => 'https://idm.example.com/pwdmgr/',
+        'date_format' => 'm.d.Y', // Use PHP's date syntax.
+    ],
 
 The `accountNameAttr` parameter represents the SAML attribute name which has 
 the user's account name stored in it. In certain situations, this will be 
 displayed to the user, as well as being used in log messages.
 
-The `expirydate_attr` parameter represents the (ldap) attribute name which has 
+The `expirydate_attr` parameter represents the SAML attribute name which has 
 the user's expiry date, which must be formated as YYYYMMDDHHMMSSZ (e.g. 
 `20111011235959Z`). Those two attributes need to be part of the attribute set 
 returned when the user successfully authenticates.
