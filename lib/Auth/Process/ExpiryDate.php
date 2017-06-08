@@ -2,6 +2,7 @@
 
 use Psr\Log\LoggerInterface;
 use Sil\Psr3Adapters\Psr3SamlLogger;
+use Sil\SspExpiryChecker\Validator;
 
 /**
  * Filter which either warns the user that their password is "about to expire"
@@ -38,6 +39,47 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         
         $this->initLogger($config['logger'] ?? []);
         
+        $this->loadValuesFromConfig($config, [
+            'warndaysbefore' => [
+                Validator::INT,
+            ],
+            'original_url_param' => [
+                Validator::STRING,
+                Validator::NOT_EMPTY,
+            ],
+            'changepwdurl' => [
+                Validator::STRING,
+                Validator::NOT_EMPTY,
+            ],
+            'accountNameAttr' => [
+                Validator::STRING,
+                Validator::NOT_EMPTY,
+            ],
+            'expirydate_attr' => [
+                Validator::STRING,
+                Validator::NOT_EMPTY,
+            ],
+            'date_format' => [
+                Validator::STRING,
+                Validator::NOT_EMPTY,
+            ],
+        ]);
+    }
+    
+    protected function loadValuesFromConfig($config, $attributeRules)
+    {
+        foreach ($attributeRules as $attribute => $rules) {
+            
+            if (array_key_exists($attribute, $config)) {
+                $this->$attribute = $config[$attribute];
+            }
+            
+            Validator::validate($this->$attribute, $rules, $this->logger, $attribute);
+        }
+    }
+    
+    protected function temp()
+    {
         if (array_key_exists('warndaysbefore', $config)) {
             $this->warndaysbefore = $config['warndaysbefore'];
             if ( ! is_int($this->warndaysbefore)) {
