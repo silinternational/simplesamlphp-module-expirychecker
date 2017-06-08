@@ -30,9 +30,7 @@ Example:
         'warnDaysBefore' => 14,
         'originalUrlParam' => 'originalurl',
         'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
-        'logger' => [
-            'class' => '\Sil\Psr3Adapters\Psr3SamlLogger',
-        ],
+        'loggerClass' => '\\Sil\\Psr3Adapters\\Psr3SamlLogger',
     ],
 
 The `accountNameAttr` parameter represents the SAML attribute name which has 
@@ -49,6 +47,9 @@ before the expiry date the "about to expire" warning will be shown to the user.
 
 The `dateFormat` parameter specifies how you want the date to be formatted, 
 using PHP `date()` syntax. See <http://php.net/manual/en/function.date.php>.
+
+The `loggerClass` parameter specifies the name of a PSR-3 compatible class that can 
+be autoloaded, to use as the logger within ExpiryDate.
 
 ## Contributing ##
 To contribute, please submit issues or pull requests at 

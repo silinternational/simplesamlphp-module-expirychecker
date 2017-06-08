@@ -37,7 +37,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         
         assert('is_array($config)');
         
-        $this->initLogger($config['logger'] ?? []);
+        $this->initLogger($config);
         
         $this->loadValuesFromConfig($config, [
             'warnDaysBefore' => [
@@ -151,10 +151,17 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         }
     }
     
-    protected function initLogger($loggerConfig)
+    protected function initLogger($config)
     {
-        $loggerClass = $loggerConfig['class'] ?? Psr3SamlLogger::class;
+        $loggerClass = $config['loggerClass'] ?? Psr3SamlLogger::class;
         $this->logger = new $loggerClass();
+        if ( ! $this->logger instanceof LoggerInterface) {
+            throw new Exception(sprintf(
+                'The specified loggerClass (%s) does not implement '
+                . '\\Psr\\Log\\LoggerInterface.',
+                var_export($loggerClass, true)
+            ), 1496928725);
+        }
     }
     
     /**

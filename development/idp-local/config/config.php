@@ -503,9 +503,7 @@ $config = [
             'changePwdUrl' => Env::get('CHANGE_PWD_URL'),
             'warnDaysBefore' => 14,
             'dateFormat' => 'Y-m-d',
-            'logger' => [
-                'class' => Psr3SamlLogger::class
-            ],
+            'loggerClass' => Psr3SamlLogger::class,
         ],
         
         /* Enable the authproc filter below to add URN Prefixces to all attributes
