@@ -25,7 +25,7 @@ composer:
 	docker-compose run --rm tests bash -c "composer install --no-scripts"
 
 composerupdate:
-	docker-compose run --rm tests bash -c "composer update --no-scripts"
+	docker-compose run --rm tests bash -c "/data/force-https-composer.sh && composer update -vvv --no-scripts"
 
 enabledebug:
 	docker-compose exec idp bash -c "/data/enable-debug.sh"

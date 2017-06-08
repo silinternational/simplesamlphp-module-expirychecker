@@ -10,6 +10,7 @@ services:
     volumes:
       - ./:/expirychecker
       - ./development/enable-debug.sh:/data/enable-debug.sh
+      - ./development/force-https-composer.sh:/data/force-https-composer.sh
       - ./development/run-dev.sh:/data/run-dev.sh
       - ./development/run-tests.sh:/data/run-tests.sh
       - ./development/symlink.sh:/data/symlink.sh
