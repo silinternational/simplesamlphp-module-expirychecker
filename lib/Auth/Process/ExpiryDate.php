@@ -410,7 +410,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         /* Save state and redirect. */
         $state['expireOnDate'] = date($this->date_format, $expiryTimestamp);
         $state['accountName'] = $accountName;
-                          $state['changepwdurl'] = $this->changepwdurl;
+        $state['changepwdurl'] = $this->changepwdurl;
         $state['original_url_param'] = $this->original_url_param;
         $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
         $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');

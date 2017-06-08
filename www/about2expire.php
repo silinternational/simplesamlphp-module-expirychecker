@@ -1,15 +1,8 @@
 <?php
 
-/**
- * about2expire.php
- *
- * @package simpleSAMLphp
- * @version $Id$
- */
-
 SimpleSAML_Logger::info('expirychecker - User has been warned that their password will expire soon.');
 
-if (!array_key_exists('StateId', $_REQUEST)) {
+if ( ! array_key_exists('StateId', $_REQUEST)) {
     throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
 }
 
@@ -29,12 +22,14 @@ if (array_key_exists("StateId", $get_data)) {
 }
 
 if (array_key_exists('continue', $_REQUEST)) {
-    /* The user has pressed the continue-button. */
+    
+    // The user has pressed the continue button.
     SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
 }
 
 if (array_key_exists('changepwd', $_REQUEST)) {
-        /* The user has pressed the change password button. */
+    
+    // The user has pressed the change-password button.
     $changePwdUrl = $state['changepwdurl'];
     
     // Add the original url as a parameter
@@ -70,6 +65,3 @@ $t->data['daysleft'] = $state['daysleft'];
 $t->data['expireOnDate'] = $state['expireOnDate'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
-
-
-?>
