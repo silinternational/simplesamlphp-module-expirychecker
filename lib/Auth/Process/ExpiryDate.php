@@ -78,63 +78,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         }
     }
     
-    protected function temp()
-    {
-        if (array_key_exists('warndaysbefore', $config)) {
-            $this->warndaysbefore = $config['warndaysbefore'];
-            if ( ! is_int($this->warndaysbefore)) {
-                $exception = new Exception(sprintf(
-                    'Invalid value for number of days (%s) given to '
-                    . 'expirychecker::ExpiryDate filter.',
-                    var_export($this->warndaysbefore, true)
-                ), 1496770709);
-                $this->logger->critical($exception->getMessage());
-                throw $exception;
-            }
-        }
-        
-        if (array_key_exists('original_url_param', $config)) {
-            $this->original_url_param = $config['original_url_param'];
-            if ( ! is_string($this->original_url_param)) {
-                throw new Exception('Invalid paramater name for the ' . 
-                                    'original url provided to ' . 
-                                    'expirychecker::ExpiryDate filter.');
-            }
-        }
-
-        if (array_key_exists('changepwdurl', $config)) {
-            $this->changepwdurl = $config['changepwdurl'];
-            if ( ! is_string($this->changepwdurl)) {
-                throw new Exception('Invalid password change URL provided to ' . 
-                                    'expirychecker::ExpiryDate filter.');
-            }
-        }
-
-        if (array_key_exists('accountNameAttr', $config)) {
-            $this->accountNameAttr = $config['accountNameAttr'];
-            if ( ! is_string($this->accountNameAttr)) {
-                throw new Exception('Invalid accountNameAttr given to ' . 
-                                    'expirychecker::ExpiryDate filter.');
-            }
-        }
-
-        if (array_key_exists('expirydate_attr', $config)) {
-            $this->expirydate_attr = $config['expirydate_attr'];
-            if ( ! is_string($this->expirydate_attr)) {
-                throw new Exception('Invalid attribute name given as ExpiryDate ' . 
-                                    'to expirychecker::ExpiryDate filter.');
-            }
-        }
-
-        if (array_key_exists('date_format', $config)) {
-            $this->date_format = $config['date_format'];
-            if ( ! is_string($this->date_format)) {
-                throw new Exception('Invalid date format given to ' . 
-                                    'expirychecker::ExpiryDate filter.');
-            }
-        }
-    }
-    
     /**
      * Get the specified attribute from the given state data.
      *
