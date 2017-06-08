@@ -8,14 +8,14 @@ bash:
 bashtests:
 	docker-compose run --rm tests bash
 
-#behat:
-#	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --stop-on-failure"
-#
-#behatappend:
-#	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --append-snippets"
-#
-#behatv:
-#	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --stop-on-failure -v"
+behat:
+	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --stop-on-failure"
+
+behatappend:
+	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --append-snippets"
+
+behatv:
+	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --stop-on-failure -v"
 
 clean:
 	docker-compose kill
@@ -33,7 +33,7 @@ enabledebug:
 ps:
 	docker-compose ps
 
-#test: composer behat
+test: composer behat
 
 web:
 	docker-compose up -d idp sp
