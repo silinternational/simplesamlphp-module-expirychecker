@@ -501,7 +501,7 @@ $config = [
             'accountNameAttr' => 'cn',
             'expiryDateAttr' => 'schacExpiryDate',
             'warnDaysBefore' => 14,
-            'date_format' => 'Y-m-d',
+            'dateFormat' => 'Y-m-d',
             'logger' => [
                 'class' => Psr3SamlLogger::class
             ],

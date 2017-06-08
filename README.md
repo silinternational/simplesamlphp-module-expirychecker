@@ -25,12 +25,11 @@ Example:
         'accountNameAttr' => 'cn',
         'expiryDateAttr' => 'schacExpiryDate',
         'warnDaysBefore' => 14,
-        'date_format' => 'Y-m-d',
         
         // Optional:
         'original_url_param' => 'originalurl',
         'changepwdurl' => 'https://idm.example.com/pwdmgr/',
-        'date_format' => 'm.d.Y', // Use PHP's date syntax.
+        'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
         'logger' => [
             'class' => '\Sil\Psr3Adapters\Psr3SamlLogger',
         ],
@@ -48,7 +47,7 @@ returned when the user successfully authenticates.
 The `warnDaysBefore` parameter should be an integer representing how many days 
 before the expiry date the "about to expire" warning will be shown to the user.
 
-The `date_format` parameter specifies how you want the date to be formatted, 
+The `dateFormat` parameter specifies how you want the date to be formatted, 
 using PHP `date()` syntax. See <http://php.net/manual/en/function.date.php>.
 
 ## Contributing ##
