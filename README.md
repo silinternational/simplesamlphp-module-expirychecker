@@ -24,11 +24,11 @@ Example:
         'class' => 'expirychecker:ExpiryDate',
         'accountNameAttr' => 'cn',
         'expiryDateAttr' => 'schacExpiryDate',
+        'changePwdUrl' => 'https://idm.example.com/pwdmgr/',
         
         // Optional:
         'warnDaysBefore' => 14,
         'originalUrlParam' => 'originalurl',
-        'changePwdUrl' => 'https://idm.example.com/pwdmgr/',
         'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
         'logger' => [
             'class' => '\Sil\Psr3Adapters\Psr3SamlLogger',

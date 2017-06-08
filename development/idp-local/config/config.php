@@ -500,6 +500,7 @@ $config = [
             'class' => 'expirychecker:ExpiryDate',
             'accountNameAttr' => 'cn',
             'expiryDateAttr' => 'schacExpiryDate',
+            'changePwdUrl' => Env::get('CHANGE_PWD_URL'),
             'warnDaysBefore' => 14,
             'dateFormat' => 'Y-m-d',
             'logger' => [
