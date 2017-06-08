@@ -28,7 +28,7 @@ Example:
         // Optional:
         'warnDaysBefore' => 14,
         'originalUrlParam' => 'originalurl',
-        'changepwdurl' => 'https://idm.example.com/pwdmgr/',
+        'changePwdUrl' => 'https://idm.example.com/pwdmgr/',
         'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
         'logger' => [
             'class' => '\Sil\Psr3Adapters\Psr3SamlLogger',

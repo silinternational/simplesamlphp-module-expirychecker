@@ -14,7 +14,7 @@ $state = SimpleSAML_Auth_State::loadState($id, 'expirywarning:about2expire');
 $get_data = $_GET;
 if (array_key_exists("StateId", $get_data)) {
     $stateId = $get_data["StateId"];
-    $chgPwdUrl = "&RelayState=" .  urlencode($state['changepwdurl']);
+    $chgPwdUrl = "&RelayState=" .  urlencode($state['changePwdUrl']);
     
     if (strpos($stateId, $chgPwdUrl) !==false) {
         SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
@@ -30,7 +30,7 @@ if (array_key_exists('continue', $_REQUEST)) {
 if (array_key_exists('changepwd', $_REQUEST)) {
     
     // The user has pressed the change-password button.
-    $changePwdUrl = $state['changepwdurl'];
+    $changePwdUrl = $state['changePwdUrl'];
     
     // Add the original url as a parameter
     if (array_key_exists('saml:RelayState', $state)) {
