@@ -8,14 +8,14 @@ bash:
 bashtests:
 	docker-compose run --rm tests bash
 
-#behat:
-#	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --stop-on-failure"
-#
-#behatappend:
-#	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --append-snippets"
-#
-#behatv:
-#	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --stop-on-failure -v"
+behat:
+	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --strict --stop-on-failure"
+
+behatappend:
+	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --strict --append-snippets"
+
+behatv:
+	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --strict --stop-on-failure -v"
 
 clean:
 	docker-compose kill
@@ -25,7 +25,7 @@ composer:
 	docker-compose run --rm tests bash -c "composer install --no-scripts"
 
 composerupdate:
-	docker-compose run --rm tests bash -c "composer update --no-scripts"
+	docker-compose run --rm tests bash -c "/data/force-https-composer.sh && composer update -vvv --no-scripts"
 
 enabledebug:
 	docker-compose exec idp bash -c "/data/enable-debug.sh"
@@ -33,7 +33,7 @@ enabledebug:
 ps:
 	docker-compose ps
 
-#test: composer behat
+test: composer behat
 
 web:
 	docker-compose up -d idp sp
