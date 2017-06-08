@@ -331,27 +331,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             $this->redirectToExpiredPage($state, $accountName, $expiryTimestamp);
         }
         
-        // If we set a special session value to say they've already been redirected
-        // to the change password page, then don't redirect them again.
-        $change_pwd_session = 'sent_to_change_password';
-        $session = SimpleSAML_Session::getInstance();
-        $expiry_data = $session->getDataOfType('expirychecker');
-
-        if (array_key_exists($change_pwd_session, $expiry_data)) {
-            SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
-        }
-
-        // Redirect the user to the change password URL if it's time to do so.
-        if ($this->isTimeToChangePassword($expiryTimestamp)) {
-            self::redirect2PasswordChange(
-                $state,
-                $accountName,
-                $this->changepwdurl,
-                $change_pwd_session,
-                $expiryTimestamp
-            );
-        }
-
         // Display a password expiration warning page if it's time to do so.
         if ($this->isTimeToWarn($expiryTimestamp, $this->warndaysbefore)) {
             $this->redirectToWarningPage($state, $accountName, $expiryTimestamp);
