@@ -24,9 +24,9 @@ Example:
         'class' => 'expirychecker:ExpiryDate',
         'accountNameAttr' => 'cn',
         'expiryDateAttr' => 'schacExpiryDate',
-        'warnDaysBefore' => 14,
         
         // Optional:
+        'warnDaysBefore' => 14,
         'original_url_param' => 'originalurl',
         'changepwdurl' => 'https://idm.example.com/pwdmgr/',
         'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
