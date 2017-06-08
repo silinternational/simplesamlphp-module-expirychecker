@@ -27,7 +27,7 @@ Example:
         
         // Optional:
         'warnDaysBefore' => 14,
-        'original_url_param' => 'originalurl',
+        'originalUrlParam' => 'originalurl',
         'changepwdurl' => 'https://idm.example.com/pwdmgr/',
         'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
         'logger' => [

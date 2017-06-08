@@ -14,7 +14,7 @@ use Sil\SspExpiryChecker\Validator;
 class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
 {
     private $warnDaysBefore = 14;
-    private $original_url_param = 'originalurl';
+    private $originalUrlParam = 'originalurl';
     private $changepwdurl = NULL;
     private $accountNameAttr = NULL;
     private $expiryDateAttr = NULL;
@@ -43,7 +43,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             'warnDaysBefore' => [
                 Validator::INT,
             ],
-            'original_url_param' => [
+            'originalUrlParam' => [
                 Validator::STRING,
                 Validator::NOT_EMPTY,
             ],
@@ -333,7 +333,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $state['expireOnDate'] = date($this->dateFormat, $expiryTimestamp);
         $state['accountName'] = $accountName;
         $state['changepwdurl'] = $this->changepwdurl;
-        $state['original_url_param'] = $this->original_url_param;
+        $state['originalUrlParam'] = $this->originalUrlParam;
         $id = SimpleSAML_Auth_State::saveState($state, 'expirywarning:about2expire');
         $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
         SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
