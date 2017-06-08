@@ -13,7 +13,7 @@ use Sil\SspExpiryChecker\Validator;
  */
 class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
 {
-    private $warndaysbefore = 14;
+    private $warnDaysBefore = 14;
     private $original_url_param = 'originalurl';
     private $changepwdurl = NULL;
     private $accountNameAttr = NULL;
@@ -40,7 +40,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $this->initLogger($config['logger'] ?? []);
         
         $this->loadValuesFromConfig($config, [
-            'warndaysbefore' => [
+            'warnDaysBefore' => [
                 Validator::INT,
             ],
             'original_url_param' => [
@@ -275,7 +275,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         }
         
         // Display a password expiration warning page if it's time to do so.
-        if ($this->isTimeToWarn($expiryTimestamp, $this->warndaysbefore)) {
+        if ($this->isTimeToWarn($expiryTimestamp, $this->warnDaysBefore)) {
             $this->redirectToWarningPage($state, $accountName, $expiryTimestamp);
         }
     }

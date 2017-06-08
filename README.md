@@ -24,7 +24,7 @@ Example:
         'class' => 'expirychecker:ExpiryDate',
         'accountNameAttr' => 'cn',
         'expiryDateAttr' => 'schacExpiryDate',
-        'warndaysbefore' => 14,
+        'warnDaysBefore' => 14,
         'date_format' => 'Y-m-d',
         
         // Optional:
@@ -45,7 +45,7 @@ the user's expiry date, which must be formated as YYYYMMDDHHMMSSZ (e.g.
 `20111011235959Z`). Those two attributes need to be part of the attribute set 
 returned when the user successfully authenticates.
 
-The `warndaysbefore` parameter should be an integer representing how many days 
+The `warnDaysBefore` parameter should be an integer representing how many days 
 before the expiry date the "about to expire" warning will be shown to the user.
 
 The `date_format` parameter specifies how you want the date to be formatted, 
