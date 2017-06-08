@@ -17,7 +17,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $original_url_param = 'originalurl';
     private $changepwdurl = NULL;
     private $accountNameAttr = NULL;
-    private $expirydate_attr = NULL;
+    private $expiryDateAttr = NULL;
     private $date_format = 'Y-m-d';
     
     /** @var LoggerInterface */
@@ -55,7 +55,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                 Validator::STRING,
                 Validator::NOT_EMPTY,
             ],
-            'expirydate_attr' => [
+            'expiryDateAttr' => [
                 Validator::STRING,
                 Validator::NOT_EMPTY,
             ],
@@ -119,15 +119,15 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * Get the timestamp for when the user's password will expire, throwing an
      * exception if unable to do so.
      *
-     * @param string $expirydate_attr The name of the attribute where the
+     * @param string $expiryDateAttr The name of the attribute where the
      *     expiration date (as a string) is stored.
      * @param array $state The state data.
      * @return int The expiration timestamp.
      * @throws Exception
      */
-    protected function getExpiryTimestamp($expirydate_attr, $state)
+    protected function getExpiryTimestamp($expiryDateAttr, $state)
     {
-        $expiryDateString = $this->getAttribute($expirydate_attr, $state);
+        $expiryDateString = $this->getAttribute($expiryDateAttr, $state);
         
         // Ensure that EVERY user login provides a usable password expiration date.
         $expiryTimestamp = strtotime($expiryDateString) ?: null;
@@ -137,7 +137,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                 . "the user's password, so we do not know whether their "
                 . "password is still valid.",
                 var_export($expiryDateString, true),
-                var_export($expirydate_attr, true)
+                var_export($expiryDateAttr, true)
             ), 1496843359);
         }
         return $expiryTimestamp;
@@ -268,7 +268,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         // Get the necessary info from the state data.
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
-        $expiryTimestamp = $this->getExpiryTimestamp($this->expirydate_attr, $state);
+        $expiryTimestamp = $this->getExpiryTimestamp($this->expiryDateAttr, $state);
         
         if ($this->isExpired($expiryTimestamp)) {
             $this->redirectToExpiredPage($state, $accountName, $expiryTimestamp);
