@@ -22,6 +22,3 @@ $t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:expired.php');
 $t->data['expireOnDate'] = $state['expireOnDate'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
-
-
-?>
