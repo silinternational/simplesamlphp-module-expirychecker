@@ -298,7 +298,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         $expireOnDate = date($this->dateFormat, $expiryTimestamp);
         $this->logger->error(sprintf(
-            'expirychecker: Password for %s has expired [%s]. Access denied!',
+            'expirychecker: Password for %s has expired [%s]. Access denied.',
             $accountName,
             $expireOnDate
         ));
@@ -332,7 +332,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         }
         
         $this->logger->warning(sprintf(
-            'expirychecker: Password for %s is about to expire!',
+            'expirychecker: Password for %s is about to expire.',
             var_export($accountName, true)
         ));
         
