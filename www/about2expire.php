@@ -9,14 +9,14 @@ if ( ! array_key_exists('StateId', $_REQUEST)) {
 $id = $_REQUEST['StateId'];
 $state = SimpleSAML_Auth_State::loadState($id, 'expirychecker:about2expire');
 
-//  Check if they're on their way to change password page and if so,
-//   let them straight through
+/* See if they're on their way to the change password page, and if so, let them
+ * straight through.   */
 $get_data = $_GET;
 if (array_key_exists("StateId", $get_data)) {
     $stateId = $get_data["StateId"];
     $chgPwdUrl = "&RelayState=" .  urlencode($state['changePwdUrl']);
     
-    if (strpos($stateId, $chgPwdUrl) !==false) {
+    if (strpos($stateId, $chgPwdUrl) !== false) {
         SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
     };
 }
