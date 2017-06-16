@@ -7,7 +7,7 @@ if ( ! array_key_exists('StateId', $_REQUEST)) {
 }
 
 $id = $_REQUEST['StateId'];
-$state = SimpleSAML_Auth_State::loadState($id, 'expirywarning:about2expire');
+$state = SimpleSAML_Auth_State::loadState($id, 'expirychecker:about2expire');
 
 //  Check if they're on their way to change password page and if so,
 //   let them straight through
@@ -35,7 +35,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
     // Add the original url as a parameter
     if (array_key_exists('saml:RelayState', $state)) {
         $id = SimpleSAML_Auth_State::saveState($state, 
-              'expirywarning:about2expire');
+              'expirychecker:about2expire');
         $stateId = "StateId=" . $id;
       
         $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(

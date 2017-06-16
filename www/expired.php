@@ -14,7 +14,7 @@ if (!array_key_exists('StateId', $_REQUEST)) {
 }
 
 $id = $_REQUEST['StateId'];
-$state = SimpleSAML_Auth_State::loadState($id, 'expirywarning:expired');
+$state = SimpleSAML_Auth_State::loadState($id, 'expirychecker:expired');
 
 $globalConfig = SimpleSAML_Configuration::getInstance();
 
