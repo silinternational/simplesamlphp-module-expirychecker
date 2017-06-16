@@ -33,7 +33,7 @@ enabledebug:
 ps:
 	docker-compose ps
 
-test: composer behat
+test: composer web behat
 
 web:
 	docker-compose up -d idp sp
