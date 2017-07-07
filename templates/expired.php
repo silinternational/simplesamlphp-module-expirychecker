@@ -1,12 +1,32 @@
 <?php
-$this->data['header'] = $this->t('{expirychecker:warning:access_denied}');
-$this->includeAtTemplateBase('includes/header.php');
-?>
 
-		<h2><?php echo $this->t('{expirychecker:warning:access_denied}');?></h2>
-		<p><?php echo $this->t('{expirychecker:warning:no_access_to}', array('%ACCOUNTNAME%' => htmlspecialchars($this->data['accountName'])));?></p> 
-		<p><?php echo $this->t('{expirychecker:warning:expiry_date_text}');?> <b><?php echo htmlspecialchars($this->data['expireOnDate']);?></b></p>
-		<p><?php echo $this->t('{expirychecker:warning:contact_home}');?></p>
-<?php
-$this->includeAtTemplateBase('includes/footer.php');
+$this->data['header'] = 'Your password has expired';
+
+$this->includeAtTemplateBase('includes/header.php');
+
 ?>
+<p>
+  The password for your <?= htmlentities($this->data['accountName']); ?>
+  account expired on <?= htmlentities($this->data['expireOnDate']); ?>.
+</p>
+<p>
+  You will need to update your password before you can continue to where you
+  were going.
+</p>
+<p>
+<form action="<?= htmlspecialchars($this->data['formTarget']); ?>">
+  
+    <?php foreach ($this->data['formData'] as $name => $value): ?>
+        <input type="hidden"
+               name="<?= htmlspecialchars($name); ?>"
+               value="<?= htmlspecialchars($value); ?>" />
+    <?php endforeach; ?>
+    
+    <button type="submit" id="yesbutton" name="changepwd"
+            style="padding: 4px 8px;">
+        Update password
+    </button>
+</form>
+<?php
+
+$this->includeAtTemplateBase('includes/footer.php');

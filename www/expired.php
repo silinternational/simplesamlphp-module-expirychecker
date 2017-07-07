@@ -1,24 +1,56 @@
 <?php
 
-/**
- * about2expire.php
- *
- * @package simpleSAMLphp
- * @version $Id$
- */
-
-SimpleSAML_Logger::info('expirychecker - User has been warned that their password has expired.');
-
-if (!array_key_exists('StateId', $_REQUEST)) {
-	throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
+$stateId = filter_input(INPUT_GET, 'StateId') ?? null;
+if (empty($stateId)) {
+    throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
 }
 
-$id = $_REQUEST['StateId'];
-$state = SimpleSAML_Auth_State::loadState($id, 'expirychecker:expired');
+$state = SimpleSAML_Auth_State::loadState($stateId, 'expirychecker:expired');
+
+/* See if they're on their way to the change password page, and if so, let them
+ * straight through.   */
+$chgPwdUrlQueryParam = "&RelayState=" .  urlencode($state['changePwdUrl']);
+if (strpos($stateId, $chgPwdUrlQueryParam) !== false) {
+    SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
+}
+
+if (array_key_exists('changepwd', $_REQUEST)) {
+    
+    // The user has pressed the change-password button.
+    $changePwdUrl = $state['changePwdUrl'];
+    
+    // Add the original url as a parameter
+    if (array_key_exists('saml:RelayState', $state)) {
+        $stateId = SimpleSAML_Auth_State::saveState(
+            $state,
+            'expirychecker:about2expire'
+        );
+      
+        $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
+            $state['saml:RelayState']
+        );
+        if ( ! empty($returnTo)) {                                 
+            $changePwdUrl .= '?returnTo=' . $returnTo;
+        }
+    }
+
+    $changePwdSession = 'sent_to_change_password';
+    $session = SimpleSAML_Session::getSession();
+    
+    // set a value to tell us they've probably changed
+    // their password, in order to allow password to get propagated
+    $session->setData('expirychecker', $changePwdSession, 1, (60*10));
+    $session->save();
+    SimpleSAML_Utilities::redirect($changePwdUrl, array());
+}
 
 $globalConfig = SimpleSAML_Configuration::getInstance();
 
 $t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:expired.php');
+$t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
+$t->data['formData'] = ['StateId' => $stateId];
 $t->data['expireOnDate'] = $state['expireOnDate'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
+
+SimpleSAML_Logger::info('expirychecker - User has been told that their password has expired.');

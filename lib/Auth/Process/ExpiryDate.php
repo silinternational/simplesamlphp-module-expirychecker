@@ -296,19 +296,25 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      */
     public function redirectToExpiredPage(&$state, $accountName, $expiryTimestamp)
     {
+        assert('is_array($state)');
+        
         $expireOnDate = date($this->dateFormat, $expiryTimestamp);
+        
         $this->logger->error(sprintf(
             'expirychecker: Password for %s has expired [%s]. Access denied.',
-            $accountName,
+            var_export($accountName, true),
             $expireOnDate
         ));
-        $globalConfig = SimpleSAML_Configuration::getInstance();
 
         /* Save state and redirect. */
         $state['expireOnDate'] = $expireOnDate;
         $state['accountName'] = $accountName;
+        $state['changePwdUrl'] = $this->changePwdUrl;
+        $state['originalUrlParam'] = $this->originalUrlParam;
+        
         $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:expired');
         $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
+        
         SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }
     
@@ -341,8 +347,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $state['accountName'] = $accountName;
         $state['changePwdUrl'] = $this->changePwdUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;
+        
         $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:about2expire');
         $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
+        
         SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }
 }

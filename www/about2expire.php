@@ -50,12 +50,11 @@ if (array_key_exists('changepwd', $_REQUEST)) {
     SimpleSAML_Utilities::redirect($changePwdUrl, array());
 }
 
-
 $globalConfig = SimpleSAML_Configuration::getInstance();
 
 $t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:about2expire.php');
 $t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
-$t->data['formData'] = array('StateId' => $stateId);
+$t->data['formData'] = ['StateId' => $stateId];
 $t->data['daysleft'] = $state['daysleft'];
 $t->data['dayOrDays'] = (intval($state['daysleft']) === 1 ? 'day' : 'days');
 $t->data['expireOnDate'] = $state['expireOnDate'];
