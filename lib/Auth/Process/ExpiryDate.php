@@ -241,18 +241,19 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         }
         
         
-       //   If state already has the change password url, go straight there to 
-       //   avoid eternal loop between that and the idp
+        /* If state already has the change password url, go straight there to
+         * avoid eternal loop between that and the idp. Otherwise add the
+         * original destination url as a parameter.  */
         if (array_key_exists('saml:RelayState', $state)) {
             $relayState = $state['saml:RelayState'];
-            if (strpos($relayState, $changePwdUrl) !==false) {                
+            if (strpos($relayState, $changePwdUrl) !== false) {                
                 SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
-        // otherwise add the original destination url as a parameter
             } else {
                 $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
-                                                                        $relayState);
-                if ($returnTo) {                                 
-                    $changePwdUrl = $changePwdUrl . "?returnTo=" . $returnTo;
+                    $relayState
+                );
+                if ( ! empty($returnTo)) {                                 
+                    $changePwdUrl .= '?returnTo=' . $returnTo;
                 }
             }
         }
