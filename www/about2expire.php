@@ -36,7 +36,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
             $state['saml:RelayState']
         );
         if ( ! empty($returnTo)) {                                 
-            $changePwdUrl .= '?ReturnTo=' . $returnTo;
+            $changePwdUrl .= '?returnTo=' . $returnTo;
         }
     }
 
