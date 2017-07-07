@@ -18,12 +18,12 @@ $this->includeAtTemplateBase('includes/header.php');
   Would you like to update your password now?
 </p>
 
-<form action="<?= htmlspecialchars($this->data['formTarget']); ?>">
+<form action="<?= htmlentities($this->data['formTarget']); ?>">
   
     <?php foreach ($this->data['formData'] as $name => $value): ?>
         <input type="hidden"
-               name="<?= htmlspecialchars($name); ?>"
-               value="<?= htmlspecialchars($value); ?>" />
+               name="<?= htmlentities($name); ?>"
+               value="<?= htmlentities($value); ?>" />
     <?php endforeach; ?>
     
     <button type="submit" id="yesbutton" name="changepwd"

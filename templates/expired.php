@@ -14,12 +14,12 @@ $this->includeAtTemplateBase('includes/header.php');
   were going.
 </p>
 <p>
-<form action="<?= htmlspecialchars($this->data['formTarget']); ?>">
+<form action="<?= htmlentities($this->data['formTarget']); ?>">
   
     <?php foreach ($this->data['formData'] as $name => $value): ?>
         <input type="hidden"
-               name="<?= htmlspecialchars($name); ?>"
-               value="<?= htmlspecialchars($value); ?>" />
+               name="<?= htmlentities($name); ?>"
+               value="<?= htmlentities($value); ?>" />
     <?php endforeach; ?>
     
     <button type="submit" id="yesbutton" name="changepwd"
