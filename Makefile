@@ -33,7 +33,9 @@ enabledebug:
 ps:
 	docker-compose ps
 
-test: composer web behat
+test: composer web
+	sleep 10
+	make behat
 
 web:
 	docker-compose up -d idp sp
