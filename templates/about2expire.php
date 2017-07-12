@@ -1,4 +1,5 @@
 <?php
+/* @var $this SimpleSAML_XHTML_Template */
 
 $this->data['header'] = sprintf(
     'Your password will expire in %s %s',
@@ -9,12 +10,16 @@ $this->data['autofocus'] = 'yesbutton';
 
 $this->includeAtTemplateBase('includes/header.php');
 
-$dateString = utf8_encode(strftime('%x', $this->data['expiresAtTimestamp']));
+$dateString = msgfmt_format_message(
+    $this->getLanguage(),
+    '{0,date,long}',
+    [$this->data['expiresAtTimestamp']]
+);
 
 ?>
 <p>
   The password for your <?= htmlentities($this->data['accountName']); ?>
-  account will expire on <?= htmlentities($dateString); ?>.
+  account will expire on <b><?= htmlentities($dateString); ?></b>.
 </p>
 <p>
   Would you like to update your password now?
