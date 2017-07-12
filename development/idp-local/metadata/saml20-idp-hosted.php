@@ -1,10 +1,13 @@
 <?php
+
+use Sil\PhpEnv\Env;
+use Sil\Psr3Adapters\Psr3SamlLogger;
+
 /**
  * SAML 2.0 IdP configuration for SimpleSAMLphp.
  *
  * See: https://simplesamlphp.org/docs/stable/simplesamlphp-reference-idp-hosted
  */
-
 $metadata['http://ssp-hub-idp.local:8085'] = [
 	/*
 	 * The hostname of the server (VHOST) that will use this SAML entity.
@@ -22,4 +25,16 @@ $metadata['http://ssp-hub-idp.local:8085'] = [
 	 * 'config/authsources.php'.
 	 */
 	'auth' => 'example-userpass',
+    
+    'authproc' => [
+        10 => [
+            'class' => 'expirychecker:ExpiryDate',
+            'accountNameAttr' => 'cn',
+            'expiryDateAttr' => 'schacExpiryDate',
+            'changePwdUrl' => Env::get('CHANGE_PWD_URL'),
+            'warnDaysBefore' => 14,
+            'dateFormat' => 'Y-m-d',
+            'loggerClass' => Psr3SamlLogger::class,
+        ],
+    ],
 ];
