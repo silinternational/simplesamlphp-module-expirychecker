@@ -2,7 +2,7 @@
 
 $this->data['header'] = sprintf(
     'Your password will expire in %s %s',
-    $this->data['daysleft'],
+    $this->data['daysLeft'],
     $this->data['dayOrDays']
 );
 $this->data['autofocus'] = 'yesbutton';

@@ -330,7 +330,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         assert('is_array($state)');
         
         $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
-        $state['daysleft'] = $daysLeft;
+        $state['daysLeft'] = $daysLeft;
         
         if (isset($state['isPassive']) && $state['isPassive'] === TRUE) {
           /* We have a passive request. Skip the warning. */
