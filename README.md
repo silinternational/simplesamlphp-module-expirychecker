@@ -15,22 +15,29 @@ required in your `composer.json` file. The `composer-module-installer` package
 will discover this module and copy it into the `modules` folder within 
 `simplesamlphp`.
 
-You will then need to set filter parameters in your config.php file.
+You will then need to set filter parameters in your config. We recommend adding 
+them to the `'authproc'` array in your `metadata/saml20-idp-hosted.php` file, 
+but you are also able to put them in the `'authproc.idp'` array in your 
+`config/config.php` file.
 
-Example:
+Example (in `metadata/saml20-idp-hosted.php`):
 
-    10 => [
-        // Required:
-        'class' => 'expirychecker:ExpiryDate',
-        'accountNameAttr' => 'cn',
-        'expiryDateAttr' => 'schacExpiryDate',
-        'changePwdUrl' => 'https://idm.example.com/pwdmgr/',
+    'authproc' => [
+        10 => [
+            // Required:
+            'class' => 'expirychecker:ExpiryDate',
+            'accountNameAttr' => 'cn',
+            'expiryDateAttr' => 'schacExpiryDate',
+            'changePwdUrl' => 'https://idm.example.com/pwdmgr/',
+
+            // Optional:
+            'warnDaysBefore' => 14,
+            'originalUrlParam' => 'originalurl',
+            'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
+            'loggerClass' => '\\Sil\\Psr3Adapters\\Psr3SamlLogger',
+        ],
         
-        // Optional:
-        'warnDaysBefore' => 14,
-        'originalUrlParam' => 'originalurl',
-        'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
-        'loggerClass' => '\\Sil\\Psr3Adapters\\Psr3SamlLogger',
+        // ...
     ],
 
 The `accountNameAttr` parameter represents the SAML attribute name which has 
