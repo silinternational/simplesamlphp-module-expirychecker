@@ -9,10 +9,12 @@ $this->data['autofocus'] = 'yesbutton';
 
 $this->includeAtTemplateBase('includes/header.php');
 
+$dateString = utf8_encode(strftime('%x', $this->data['expiresAtTimestamp']));
+
 ?>
 <p>
   The password for your <?= htmlentities($this->data['accountName']); ?>
-  account will expire on <?= htmlentities($this->data['expireOnDate']); ?>.
+  account will expire on <?= htmlentities($dateString); ?>.
 </p>
 <p>
   Would you like to update your password now?

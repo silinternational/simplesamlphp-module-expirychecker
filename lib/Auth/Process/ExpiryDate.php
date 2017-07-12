@@ -209,6 +209,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      * @param string $accountName
      * @param string $changePwdUrl
      * @param string $change_pwd_session
+     * @param int $expiryTimestamp The timestamp when the password will expire.
      */
     public function redirect2PasswordChange(
         &$state,
@@ -219,7 +220,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     ) {
         $sessionType = 'expirychecker';
         /* Save state and redirect. */
-        $state['expireOnDate'] = date($this->dateFormat, $expiryTimestamp);
+        $state['expiresAtTimestamp'] = $expiryTimestamp;
         $state['accountName'] = $accountName;
         $id = SimpleSAML_Auth_State::saveState($state,
             'expirychecker:redirected_to_password_change_url');
@@ -299,16 +300,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         assert('is_array($state)');
         
-        $expireOnDate = date($this->dateFormat, $expiryTimestamp);
-        
         $this->logger->error(sprintf(
             'expirychecker: Password for %s has expired [%s]. Access denied.',
             var_export($accountName, true),
-            $expireOnDate
+            date($this->dateFormat, $expiryTimestamp)
         ));
 
         /* Save state and redirect. */
-        $state['expireOnDate'] = $expireOnDate;
+        $state['expiresAtTimestamp'] = $expiryTimestamp;
         $state['accountName'] = $accountName;
         $state['changePwdUrl'] = $this->changePwdUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;
@@ -344,7 +343,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         ));
         
         /* Save state and redirect. */
-        $state['expireOnDate'] = date($this->dateFormat, $expiryTimestamp);
+        $state['expiresAtTimestamp'] = $expiryTimestamp;
         $state['accountName'] = $accountName;
         $state['changePwdUrl'] = $this->changePwdUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;

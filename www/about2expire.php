@@ -57,7 +57,7 @@ $t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/about2ex
 $t->data['formData'] = ['StateId' => $stateId];
 $t->data['daysleft'] = $state['daysleft'];
 $t->data['dayOrDays'] = (intval($state['daysleft']) === 1 ? 'day' : 'days');
-$t->data['expireOnDate'] = $state['expireOnDate'];
+$t->data['expiresAtTimestamp'] = $state['expiresAtTimestamp'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
 
