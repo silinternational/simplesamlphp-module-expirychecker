@@ -4,10 +4,12 @@ $this->data['header'] = 'Your password has expired';
 
 $this->includeAtTemplateBase('includes/header.php');
 
+$dateString = utf8_encode(strftime('%x', $this->data['expiresAtTimestamp']));
+
 ?>
 <p>
   The password for your <?= htmlentities($this->data['accountName']); ?>
-  account expired on <?= htmlentities($this->data['expireOnDate']); ?>.
+  account expired on <?= htmlentities($dateString); ?>.
 </p>
 <p>
   You will need to update your password before you can continue to where you
