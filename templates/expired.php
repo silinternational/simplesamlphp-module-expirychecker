@@ -4,7 +4,11 @@ $this->data['header'] = 'Your password has expired';
 
 $this->includeAtTemplateBase('includes/header.php');
 
-$dateString = utf8_encode(strftime('%x', $this->data['expiresAtTimestamp']));
+$dateString = msgfmt_format_message(
+    $this->getLanguage(),
+    '{0,date,long}',
+    [$this->data['expiresAtTimestamp']]
+);
 
 ?>
 <p>
