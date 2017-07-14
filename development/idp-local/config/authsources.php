@@ -4,7 +4,7 @@ $config = [
     'example-userpass' => [
         'exampleauth:UserPass',
         'distant_future:a' => [
-            'eduPersonPrincipalName' => ['DISTANT_FUTURE-hub-idp.local'],
+            'eduPersonPrincipalName' => ['DISTANT_FUTURE@ssp-hub-idp.local'],
             'eduPersonTargetID' => ['11111111-1111-1111-1111-111111111111'],
             'sn' => ['Future'],
             'givenName' => ['Distant'],
