@@ -7,14 +7,11 @@ if (empty($stateId)) {
 
 $state = SimpleSAML_Auth_State::loadState($stateId, 'expirychecker:expired');
 
-/* See if they're on their way to the change password page, and if so, let them
- * straight through.   */
-$chgPwdUrlQueryParam = "&RelayState=" .  urlencode($state['changePwdUrl']);
-if (strpos($stateId, $chgPwdUrlQueryParam) !== false) {
-    SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
-}
-
 if (array_key_exists('changepwd', $_REQUEST)) {
+    
+    /* Now that they've clicked change-password, skip the splash pages very
+     * briefly, to let the user get to the change-password website.  */
+    ExpiryDate::skipSplashPagesFor(60); // 60 seconds = 1 minute
     
     // The user has pressed the change-password button.
     $changePwdUrl = $state['changePwdUrl'];
@@ -33,14 +30,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
             $changePwdUrl .= '?returnTo=' . $returnTo;
         }
     }
-
-    $changePwdSession = 'sent_to_change_password';
-    $session = SimpleSAML_Session::getSession();
     
-    // set a value to tell us they've probably changed
-    // their password, in order to allow password to get propagated
-    $session->setData('expirychecker', $changePwdSession, 1, (60*10));
-    $session->save();
     SimpleSAML_Utilities::redirect($changePwdUrl, array());
 }
 
