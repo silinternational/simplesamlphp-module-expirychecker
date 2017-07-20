@@ -1,5 +1,7 @@
 <?php
 
+use sspmod_expirychecker_Auth_Process_ExpiryDate as ExpiryDate;
+
 $stateId = filter_input(INPUT_GET, 'StateId') ?? null;
 if (empty($stateId)) {
     throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
