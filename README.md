@@ -4,7 +4,7 @@ or that it has already expired.
 
 **NOTE:** This module does *not* prevent the user from logging in. It merely 
 shows a warning page (if their password is about to expire), with the option to 
-change their password now or later, or it tells the user that they password has 
+change their password now or later, or it tells the user that their password has
 already expired, with the only option being to go change their password now. 
 Both of these pages will be bypassed (for varying lengths of time) if the user 
 has recently seen one of those two pages, in order to allow the user to get to 
