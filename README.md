@@ -38,7 +38,7 @@ Example (in `metadata/saml20-idp-hosted.php`):
             'class' => 'expirychecker:ExpiryDate',
             'accountNameAttr' => 'cn',
             'expiryDateAttr' => 'schacExpiryDate',
-            'changePwdUrl' => 'https://idm.example.com/pwdmgr/',
+            'passwordChangeUrl' => 'https://idm.example.com/pwdmgr/',
 
             // Optional:
             'warnDaysBefore' => 14,

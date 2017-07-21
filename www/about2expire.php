@@ -22,7 +22,7 @@ if (array_key_exists('continue', $_REQUEST)) {
 if (array_key_exists('changepwd', $_REQUEST)) {
     
     // The user has pressed the change-password button.
-    $changePwdUrl = $state['changePwdUrl'];
+    $passwordChangeUrl = $state['passwordChangeUrl'];
     
     // Add the original url as a parameter
     if (array_key_exists('saml:RelayState', $state)) {
@@ -35,11 +35,11 @@ if (array_key_exists('changepwd', $_REQUEST)) {
             $state['saml:RelayState']
         );
         if ( ! empty($returnTo)) {                                 
-            $changePwdUrl .= '?returnTo=' . $returnTo;
+            $passwordChangeUrl .= '?returnTo=' . $returnTo;
         }
     }
     
-    SimpleSAML_Utilities::redirect($changePwdUrl, array());
+    SimpleSAML_Utilities::redirect($passwordChangeUrl, array());
 }
 
 $globalConfig = SimpleSAML_Configuration::getInstance();
