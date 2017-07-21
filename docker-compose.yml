@@ -24,7 +24,6 @@ services:
 
       # Utilize custom configs
       - ./development/idp-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
-      - ./development/idp-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
 
       # Utilize custom metadata
       - ./development/idp-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
@@ -48,7 +47,6 @@ services:
       - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
-      - ./development/sp-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
       - ./development/sp-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
 
       # Utilize custom metadata
