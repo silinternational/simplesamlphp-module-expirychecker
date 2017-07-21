@@ -13,6 +13,9 @@ use Sil\SspExpiryChecker\Validator;
  */
 class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
 {
+    const HAS_SEEN_SPLASH_PAGE = 'has_seen_splash_page';
+    const SESSION_TYPE = 'expirychecker';
+    
     private $warnDaysBefore = 14;
     private $originalUrlParam = 'originalurl';
     private $changePwdUrl = NULL;
@@ -141,6 +144,27 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             ), 1496843359);
         }
         return $expiryTimestamp;
+    }
+    
+    public static function hasSeenSplashPageRecently()
+    {
+        $session = SimpleSAML_Session::getSession();
+        return (bool)$session->getData(
+            self::SESSION_TYPE,
+            self::HAS_SEEN_SPLASH_PAGE
+        );
+    }
+    
+    public static function skipSplashPagesFor($seconds)
+    {
+        $session = SimpleSAML_Session::getSession();
+        $session->setData(
+            self::SESSION_TYPE,
+            self::HAS_SEEN_SPLASH_PAGE,
+            true,
+            $seconds
+        );
+        $session->save();
     }
     
     protected function initComposerAutoloader()
@@ -275,6 +299,13 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      */
     public function process(&$state)
     {
+        /* If the user has already seen a splash page from this AuthProc
+         * recently, simply let them pass on through (so they can get into the
+         * change-password website, for example).  */
+        if (self::hasSeenSplashPageRecently()) {
+            return;
+        }
+        
         // Get the necessary info from the state data.
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
         $expiryTimestamp = $this->getExpiryTimestamp($this->expiryDateAttr, $state);
