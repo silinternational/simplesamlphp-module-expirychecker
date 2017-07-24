@@ -48,9 +48,9 @@ class sspmod_expirychecker_Utilities {
   *  for apex to use. If the domains of the change password url and the 
   *  original url are different, it appends the StateId to the output.
          */
-    public static function convertOriginalUrl($changePwdUrl,
+    public static function convertOriginalUrl($passwordChangeUrl,
                                   $originalUrlParam, $originalUrl, $stateId ) {
-        $sameDomain = self::haveSameDomain($changePwdUrl,
+        $sameDomain = self::haveSameDomain($passwordChangeUrl,
           '//', '/', $originalUrl, '//', '/');
         $original = $originalUrlParam . ":" . urlencode($originalUrl);
         // make changes that insite/apex needs in url
