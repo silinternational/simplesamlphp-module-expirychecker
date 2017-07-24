@@ -18,7 +18,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     
     private $warnDaysBefore = 14;
     private $originalUrlParam = 'originalurl';
-    private $changePwdUrl = NULL;
+    private $passwordChangeUrl = NULL;
     private $accountNameAttr = NULL;
     private $expiryDateAttr = NULL;
     private $dateFormat = 'Y-m-d';
@@ -50,7 +50,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                 Validator::STRING,
                 Validator::NOT_EMPTY,
             ],
-            'changePwdUrl' => [
+            'passwordChangeUrl' => [
                 Validator::STRING,
                 Validator::NOT_EMPTY,
             ],
@@ -231,14 +231,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      *   there in the last 10 minutes
      * @param array $state
      * @param string $accountName
-     * @param string $changePwdUrl
+     * @param string $passwordChangeUrl
      * @param string $change_pwd_session
      * @param int $expiryTimestamp The timestamp when the password will expire.
      */
     public function redirect2PasswordChange(
         &$state,
         $accountName,
-        $changePwdUrl,
+        $passwordChangeUrl,
         $change_pwd_session,
         $expiryTimestamp
     ) {
@@ -271,14 +271,14 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
          * original destination url as a parameter.  */
         if (array_key_exists('saml:RelayState', $state)) {
             $relayState = $state['saml:RelayState'];
-            if (strpos($relayState, $changePwdUrl) !== false) {                
+            if (strpos($relayState, $passwordChangeUrl) !== false) {                
                 SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
             } else {
                 $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
                     $relayState
                 );
                 if ( ! empty($returnTo)) {                                 
-                    $changePwdUrl .= '?returnTo=' . $returnTo;
+                    $passwordChangeUrl .= '?returnTo=' . $returnTo;
                 }
             }
         }
@@ -286,10 +286,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $this->logger->warning(sprintf(
             'expirychecker: Password for %s is about to expire, redirecting to %s',
             var_export($accountName, true),
-            var_export($changePwdUrl, true)
+            var_export($passwordChangeUrl, true)
         ));
 
-        SimpleSAML_Utilities::redirect($changePwdUrl, array());
+        SimpleSAML_Utilities::redirect($passwordChangeUrl, array());
     }
     
     /**
@@ -340,7 +340,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         /* Save state and redirect. */
         $state['expiresAtTimestamp'] = $expiryTimestamp;
         $state['accountName'] = $accountName;
-        $state['changePwdUrl'] = $this->changePwdUrl;
+        $state['passwordChangeUrl'] = $this->passwordChangeUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;
         
         $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:expired');
@@ -376,7 +376,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         /* Save state and redirect. */
         $state['expiresAtTimestamp'] = $expiryTimestamp;
         $state['accountName'] = $accountName;
-        $state['changePwdUrl'] = $this->changePwdUrl;
+        $state['passwordChangeUrl'] = $this->passwordChangeUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;
         
         $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:about2expire');
