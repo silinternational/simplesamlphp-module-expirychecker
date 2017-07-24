@@ -24,7 +24,6 @@ services:
 
       # Utilize custom configs
       - ./development/idp-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
-      - ./development/idp-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
 
       # Utilize custom metadata
       - ./development/idp-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
@@ -36,6 +35,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=a
+      - IDP_NAME=Local IdP
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
@@ -48,7 +48,6 @@ services:
       - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
-      - ./development/sp-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
       - ./development/sp-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
 
       # Utilize custom metadata
@@ -58,6 +57,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp1
+      - IDP_NAME=THIS VARIABLE IS REQUIRED BUT PROBABLY NOT USED
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz1
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
