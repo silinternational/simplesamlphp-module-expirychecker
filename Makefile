@@ -22,7 +22,7 @@ clean:
 	docker system prune -f
 
 composer:
-	docker-compose run --rm composer
+	docker-compose run --rm composer bash -c "composer install --no-scripts"
 
 composerupdate:
 	docker-compose run --rm composer bash -c "composer update --no-scripts"
