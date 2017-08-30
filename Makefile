@@ -22,10 +22,10 @@ clean:
 	docker system prune -f
 
 composer:
-	docker-compose run --rm tests bash -c "composer install --no-scripts"
+	docker-compose run --rm composer
 
 composerupdate:
-	docker-compose run --rm tests bash -c "/data/force-https-composer.sh && composer update -vvv --no-scripts"
+	docker-compose run --rm composer bash -c "composer update --no-scripts"
 
 enabledebug:
 	docker-compose exec idp bash -c "/data/enable-debug.sh"

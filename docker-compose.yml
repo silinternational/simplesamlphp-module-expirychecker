@@ -64,6 +64,17 @@ services:
       - SAML20_IDP_ENABLE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
 
+  composer:
+    image: silintl/ssp-base:develop
+    volumes:
+      - ./composer.json:/data/composer.json
+      - ./composer.lock:/data/composer.lock
+      - ./vendor:/data/vendor
+    env_file:
+      - ./local.env
+    working_dir: /data
+    command: ["composer install --no-scripts"]
+
   tests:
     image: silintl/ssp-base:develop
     volumes_from:
