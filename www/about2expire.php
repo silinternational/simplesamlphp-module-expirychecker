@@ -34,7 +34,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
         $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
             $state['saml:RelayState']
         );
-        if ( ! empty($returnTo)) {                                 
+        if (! empty($returnTo)) {
             $passwordChangeUrl .= '?returnTo=' . $returnTo;
         }
     }
@@ -45,7 +45,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
 $globalConfig = SimpleSAML_Configuration::getInstance();
 
 $t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:about2expire.php');
-$t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
+$t->data['formTarget'] = SimpleSAML\Module::getModuleURL('expirychecker/about2expire.php');
 $t->data['formData'] = ['StateId' => $stateId];
 $t->data['daysLeft'] = $state['daysLeft'];
 $t->data['dayOrDays'] = (intval($state['daysLeft']) === 1 ? 'day' : 'days');
@@ -53,4 +53,4 @@ $t->data['expiresAtTimestamp'] = $state['expiresAtTimestamp'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
 
-SimpleSAML_Logger::info('expirychecker - User has been warned that their password will expire soon.');
+SimpleSAML\Logger::info('expirychecker - User has been warned that their password will expire soon.');
