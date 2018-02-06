@@ -13,7 +13,7 @@
   "require": {
     "php": ">=7.0",
     "roave/security-advisories": "dev-master",
-    "silinternational/psr3-adapters": "^1.1",
+    "silinternational/psr3-adapters": "^1.1 || ^2.0",
     "simplesamlphp/simplesamlphp": "^1.14.12"
   },
   "require-dev": {
