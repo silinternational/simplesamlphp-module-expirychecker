@@ -45,4 +45,4 @@ $t->data['expiresAtTimestamp'] = $state['expiresAtTimestamp'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
 
-SimpleSAML_Logger::info('expirychecker - User has been told that their password has expired.');
+SimpleSAML\Logger::info('expirychecker - User has been told that their password has expired.');
