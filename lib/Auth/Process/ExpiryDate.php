@@ -344,7 +344,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $state['originalUrlParam'] = $this->originalUrlParam;
         
         $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:expired');
-        $url = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
+        $url = SimpleSAML\Module::getModuleURL('expirychecker/expired.php');
         
         SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }
@@ -380,7 +380,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $state['originalUrlParam'] = $this->originalUrlParam;
         
         $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:about2expire');
-        $url = SimpleSAML_Module::getModuleURL('expirychecker/about2expire.php');
+        $url = SimpleSAML\Module::getModuleURL('expirychecker/about2expire.php');
         
         SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
     }

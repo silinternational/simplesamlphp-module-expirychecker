@@ -39,7 +39,7 @@ if (array_key_exists('changepwd', $_REQUEST)) {
 $globalConfig = SimpleSAML_Configuration::getInstance();
 
 $t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:expired.php');
-$t->data['formTarget'] = SimpleSAML_Module::getModuleURL('expirychecker/expired.php');
+$t->data['formTarget'] = SimpleSAML\Module::getModuleURL('expirychecker/expired.php');
 $t->data['formData'] = ['StateId' => $stateId];
 $t->data['expiresAtTimestamp'] = $state['expiresAtTimestamp'];
 $t->data['accountName'] = $state['accountName'];
