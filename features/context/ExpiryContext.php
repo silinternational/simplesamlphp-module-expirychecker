@@ -19,7 +19,7 @@ class ExpiryContext implements Context
     /**
      * The browser session, used for interacting with the website.
      *
-     * @var Session 
+     * @var Session
      */
     protected $session;
     
@@ -163,11 +163,19 @@ class ExpiryContext implements Context
         $loginButton = $this->getLoginButton($page);
         $loginButton->click();
         
-        $body = $page->find('css', 'body');
-        if ($body instanceof NodeElement) {
-            $onload = $body->getAttribute('onload');
-            if ($onload === "document.getElementsByTagName('input')[0].click();") {
-                $body->pressButton('Submit');
+        // SimpleSAMLphp 1.15 markup for secondary page:
+        $postLoginSubmitButton = $page->findButton('postLoginSubmitButton');
+        if ($postLoginSubmitButton instanceof NodeElement) {
+            $postLoginSubmitButton->click();
+        } else {
+            
+            // SimpleSAMLphp 1.14 markup for secondary page:
+            $body = $page->find('css', 'body');
+            if ($body instanceof NodeElement) {
+                $onload = $body->getAttribute('onload');
+                if ($onload === "document.getElementsByTagName('input')[0].click();") {
+                    $body->pressButton('Submit');
+                }
             }
         }
     }
