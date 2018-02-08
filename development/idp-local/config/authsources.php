@@ -39,5 +39,26 @@ $config = [
                 gmdate('YmdHis\Z', strtotime('-1 day')), // In the past
             ],
         ],
+        'missing_exp:d' => [
+            'eduPersonPrincipalName' => ['MISSING_EXP@ssp-hub-idp.local'],
+            'eduPersonTargetID' => ['44444444-4444-4444-4444-444444444444'],
+            'sn' => ['Expiration'],
+            'givenName' => ['Missing'],
+            'mail' => ['missing_exp@example.com'],
+            'employeeNumber' => ['44444'],
+            'cn' => ['MISSING_EXP'],
+        ],
+        'invalid_exp:e' => [
+            'eduPersonPrincipalName' => ['INVALID_EXP@ssp-hub-idp.local'],
+            'eduPersonTargetID' => ['55555555-5555-5555-5555-555555555555'],
+            'sn' => ['Expiration'],
+            'givenName' => ['Invalid'],
+            'mail' => ['invalid_exp@example.com'],
+            'employeeNumber' => ['55555'],
+            'cn' => ['INVALID_EXP'],
+            'schacExpiryDate' => [
+                'invalid'
+            ],
+        ],
     ],
 ];
