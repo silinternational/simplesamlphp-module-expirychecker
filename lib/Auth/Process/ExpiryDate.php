@@ -20,6 +20,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     private $originalUrlParam = 'originalurl';
     private $passwordChangeUrl = null;
     private $accountNameAttr = null;
+    private $employeeIdAttr = 'employeeNumber';
     private $expiryDateAttr = null;
     private $dateFormat = 'Y-m-d';
     
@@ -288,11 +289,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             }
         }
 
-        $this->logger->warning(sprintf(
-            'expirychecker: Password for %s is about to expire, redirecting to %s',
-            var_export($accountName, true),
-            var_export($passwordChangeUrl, true)
-        ));
+        $this->logger->warning([
+            'event' => 'expirychecker: redirecting to change password',
+            'accountName' => $accountName,
+            'passwordChangeUrl' => $passwordChangeUrl,
+        ]);
 
         SimpleSAML_Utilities::redirect($passwordChangeUrl, array());
     }
@@ -304,16 +305,30 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      */
     public function process(&$state)
     {
+        $employeeId = $this->getAttribute($this->employeeIdAttr, $state);
+        
         /* If the user has already seen a splash page from this AuthProc
          * recently, simply let them pass on through (so they can get into the
          * change-password website, for example).  */
         if (self::hasSeenSplashPageRecently()) {
+            $this->logger->warning([
+                'event' => 'expirychecker: skip message, seen recently',
+                'employeeId' => $employeeId,
+            ]);
             return;
         }
         
         // Get the necessary info from the state data.
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
         $expiryTimestamp = $this->getExpiryTimestamp($this->expiryDateAttr, $state);
+        
+        $this->logger->warning([
+            'event' => 'expirychecker: will check expiration date',
+            'employeeId' => $employeeId,
+            'accountName' => $accountName,
+            'expiryDateAttrValue' => $this->getAttribute($this->expiryDateAttr, $state),
+            'expiryTimestamp' => $expiryTimestamp,
+        ]);
         
         if ($this->isExpired($expiryTimestamp)) {
             $this->redirectToExpiredPage($state, $accountName, $expiryTimestamp);
@@ -323,6 +338,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         if ($this->isTimeToWarn($expiryTimestamp, $this->warnDaysBefore)) {
             $this->redirectToWarningPage($state, $accountName, $expiryTimestamp);
         }
+        
+        $this->logger->warning([
+            'event' => 'expirychecker: no action necessary',
+            'employeeId' => $employeeId,
+        ]);
     }
     
     /**
@@ -336,11 +356,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         assert('is_array($state)');
         
-        $this->logger->error(sprintf(
-            'expirychecker: Password for %s has expired [%s]. Access denied.',
-            var_export($accountName, true),
-            date($this->dateFormat, $expiryTimestamp)
-        ));
+        $this->logger->warning([
+            'event' => 'expirychecker: password expired',
+            'employeeId' => $employeeId,
+        ]);
 
         /* Save state and redirect. */
         $state['expiresAtTimestamp'] = $expiryTimestamp;
@@ -365,6 +384,11 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     {
         assert('is_array($state)');
         
+        $this->logger->warning([
+            'event' => 'expirychecker: about to expire',
+            'accountName' => $accountName,
+        ]);
+        
         $daysLeft = $this->getDaysLeftBeforeExpiry($expiryTimestamp);
         $state['daysLeft'] = $daysLeft;
         
@@ -372,11 +396,6 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             /* We have a passive request. Skip the warning. */
             return;
         }
-        
-        $this->logger->warning(sprintf(
-            'expirychecker: Password for %s is about to expire.',
-            var_export($accountName, true)
-        ));
         
         /* Save state and redirect. */
         $state['expiresAtTimestamp'] = $expiryTimestamp;
