@@ -18,3 +18,13 @@ Feature: Password expiration warning/notice feature
     Then I should see a message that my password has expired
       And there should be a way to go change my password now
       But there should NOT be a way to continue without changing my password
+
+  Scenario: Reject missing expiration date
+    Given I provide credentials that have no password expiration date
+    When I login
+    Then I should see an error message
+
+  Scenario: Reject invalid expiration date
+    Given I provide credentials that have an invalid password expiration date
+    When I login
+    Then I should see an error message
