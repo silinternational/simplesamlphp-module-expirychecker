@@ -225,4 +225,33 @@ class ExpiryContext implements Context
         $page = $this->session->getPage();
         $this->assertFormNotContains('continue', $page);
     }
+
+    /**
+     * @Given I provide credentials that have no password expiration date
+     */
+    public function iProvideCredentialsThatHaveNoPasswordExpirationDate()
+    {
+        // See `development/idp-local/config/authsources.php` for options.
+        $this->username = 'missing_exp';
+        $this->password = 'd';
+    }
+
+    /**
+     * @Then I should see an error message
+     */
+    public function iShouldSeeAnErrorMessage()
+    {
+        $page = $this->session->getPage();
+        Assert::assertContains('An error occurred', $page->getHtml());
+    }
+
+    /**
+     * @Given I provide credentials that have an invalid password expiration date
+     */
+    public function iProvideCredentialsThatHaveAnInvalidPasswordExpirationDate()
+    {
+        // See `development/idp-local/config/authsources.php` for options.
+        $this->username = 'invalid_exp';
+        $this->password = 'e';
+    }
 }
