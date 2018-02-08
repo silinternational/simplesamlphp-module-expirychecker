@@ -358,7 +358,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         
         $this->logger->warning(json_encode([
             'event' => 'expirychecker: password expired',
-            'employeeId' => $employeeId,
+            'accountName' => $accountName,
         ]));
 
         /* Save state and redirect. */
