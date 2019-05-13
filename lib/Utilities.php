@@ -80,7 +80,7 @@ class Utilities {
      * @param string $relayState
      * @return string
      **/
-    public function getUrlFromRelayState($relayState) {
+    public static function getUrlFromRelayState($relayState) {
         if (strpos($relayState, "http") === 0) {
             return $relayState;
         }
