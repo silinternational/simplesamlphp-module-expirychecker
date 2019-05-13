@@ -3,3 +3,4 @@ local.*
 /nbproject/
 .vagrant/
 vendor/
+.idea/
