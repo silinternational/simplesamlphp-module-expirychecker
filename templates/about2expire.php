@@ -1,5 +1,5 @@
 <?php
-/* @var $this SimpleSAML_XHTML_Template */
+/* @var $this \SimpleSAML\XHTML\Template */
 
 $this->data['header'] = sprintf(
     'Your password will expire in %s %s',

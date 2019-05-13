@@ -1,5 +1,8 @@
 <?php
-class sspmod_expirychecker_Utilities {
+
+namespace SimpleSAML\Module\expirychecker;
+
+class Utilities {
 
   /**
   * Expects three strings for a url and what marks out the beginning
