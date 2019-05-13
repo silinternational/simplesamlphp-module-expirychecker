@@ -78,7 +78,7 @@ class Utilities {
      * If the $relayState begins with "http", returns it.
      *   Otherwise, returns empty string.
      * @param string $relayState
-     * @returns string
+     * @return string
      **/
     public function getUrlFromRelayState($relayState) {
         if (strpos($relayState, "http") === 0) {
