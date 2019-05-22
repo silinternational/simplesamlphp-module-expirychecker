@@ -1,5 +1,8 @@
 <?php
-class sspmod_expirychecker_Utilities {
+
+namespace SimpleSAML\Module\expirychecker;
+
+class Utilities {
 
   /**
   * Expects three strings for a url and what marks out the beginning
@@ -75,9 +78,9 @@ class sspmod_expirychecker_Utilities {
      * If the $relayState begins with "http", returns it.
      *   Otherwise, returns empty string.
      * @param string $relayState
-     * @returns string
+     * @return string
      **/
-    public function getUrlFromRelayState($relayState) {
+    public static function getUrlFromRelayState($relayState) {
         if (strpos($relayState, "http") === 0) {
             return $relayState;
         }
