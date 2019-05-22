@@ -3,7 +3,7 @@ version: "2"
 services:
 
   idp:
-    image: silintl/ssp-base:feature_update-to-ssp-1-17
+    image: silintl/ssp-base:develop
     ports:
       - "8085:80"
       - "9000:9000"
@@ -42,7 +42,7 @@ services:
     command: ["/data/run-dev.sh"]
 
   sp:
-    image: silintl/ssp-base:feature_update-to-ssp-1-17
+    image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
       - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -65,7 +65,7 @@ services:
       - ADMIN_PROTECT_INDEX_PAGE=false
 
   composer:
-    image: silintl/ssp-base:feature_update-to-ssp-1-17
+    image: silintl/ssp-base:develop
     volumes:
       - ./composer.json:/data/composer.json
       - ./composer.lock:/data/composer.lock
@@ -75,7 +75,7 @@ services:
     working_dir: /data
 
   tests:
-    image: silintl/ssp-base:feature_update-to-ssp-1-17
+    image: silintl/ssp-base:develop
     volumes_from:
       - idp
     volumes:
