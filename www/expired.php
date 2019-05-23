@@ -1,13 +1,21 @@
 <?php
 
-use sspmod_expirychecker_Auth_Process_ExpiryDate as ExpiryDate;
+use SimpleSAML\Auth\State;
+use SimpleSAML\Configuration;
+use SimpleSAML\Error\BadRequest;
+use SimpleSAML\Logger;
+use SimpleSAML\Module;
+use SimpleSAML\Module\expirychecker\Auth\Process\ExpiryDate;
+use SimpleSAML\Module\expirychecker\Utilities;
+use SimpleSAML\Utils\HTTP;
+use SimpleSAML\XHTML\Template;
 
 $stateId = filter_input(INPUT_GET, 'StateId') ?? null;
 if (empty($stateId)) {
-    throw new SimpleSAML_Error_BadRequest('Missing required StateId query parameter.');
+    throw new BadRequest('Missing required StateId query parameter.');
 }
 
-$state = SimpleSAML_Auth_State::loadState($stateId, 'expirychecker:expired');
+$state = State::loadState($stateId, 'expirychecker:expired');
 
 if (array_key_exists('changepwd', $_REQUEST)) {
     
@@ -20,29 +28,29 @@ if (array_key_exists('changepwd', $_REQUEST)) {
     
     // Add the original url as a parameter
     if (array_key_exists('saml:RelayState', $state)) {
-        $stateId = SimpleSAML_Auth_State::saveState(
+        $stateId = State::saveState(
             $state,
             'expirychecker:about2expire'
         );
       
-        $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
+        $returnTo = Utilities::getUrlFromRelayState(
             $state['saml:RelayState']
         );
         if (! empty($returnTo)) {
             $passwordChangeUrl .= '?returnTo=' . $returnTo;
         }
     }
-    
-    SimpleSAML_Utilities::redirect($passwordChangeUrl, array());
+
+    HTTP::redirectTrustedURL($passwordChangeUrl, array());
 }
 
-$globalConfig = SimpleSAML_Configuration::getInstance();
+$globalConfig = Configuration::getInstance();
 
-$t = new SimpleSAML_XHTML_Template($globalConfig, 'expirychecker:expired.php');
-$t->data['formTarget'] = SimpleSAML\Module::getModuleURL('expirychecker/expired.php');
+$t = new Template($globalConfig, 'expirychecker:expired.php');
+$t->data['formTarget'] = Module::getModuleURL('expirychecker/expired.php');
 $t->data['formData'] = ['StateId' => $stateId];
 $t->data['expiresAtTimestamp'] = $state['expiresAtTimestamp'];
 $t->data['accountName'] = $state['accountName'];
 $t->show();
 
-SimpleSAML\Logger::info('expirychecker - User has been told that their password has expired.');
+Logger::info('expirychecker - User has been told that their password has expired.');

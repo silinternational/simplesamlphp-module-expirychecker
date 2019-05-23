@@ -1,8 +1,17 @@
 <?php
 
+namespace SimpleSAML\Module\expirychecker\Auth\Process;
+
 use Psr\Log\LoggerInterface;
 use Sil\Psr3Adapters\Psr3SamlLogger;
 use Sil\SspExpiryChecker\Validator;
+use SimpleSAML\Auth\ProcessingChain;
+use SimpleSAML\Auth\ProcessingFilter;
+use SimpleSAML\Auth\State;
+use SimpleSAML\Module;
+use SimpleSAML\Module\expirychecker\Utilities;
+use SimpleSAML\Session;
+use SimpleSAML\Utils\HTTP;
 
 /**
  * Filter which either warns the user that their password is "about to expire"
@@ -11,7 +20,7 @@ use Sil\SspExpiryChecker\Validator;
  *
  * See README.md for sample (and explanation of) expected configuration.
  */
-class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_ProcessingFilter
+class ExpiryDate extends ProcessingFilter
 {
     const HAS_SEEN_SPLASH_PAGE = 'has_seen_splash_page';
     const SESSION_TYPE = 'expirychecker';
@@ -126,7 +135,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
      *     expiration date (as a string) is stored.
      * @param array $state The state data.
      * @return int The expiration timestamp.
-     * @throws Exception
+     * @throws \Exception
      */
     protected function getExpiryTimestamp($expiryDateAttr, $state)
     {
@@ -135,7 +144,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         // Ensure that EVERY user login provides a usable password expiration date.
         $expiryTimestamp = strtotime($expiryDateString) ?: null;
         if (empty($expiryTimestamp)) {
-            throw new Exception(sprintf(
+            throw new \Exception(sprintf(
                 "We could not understand the expiration date (%s, from %s) for "
                 . "the user's password, so we do not know whether their "
                 . "password is still valid.",
@@ -148,7 +157,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     
     public static function hasSeenSplashPageRecently()
     {
-        $session = SimpleSAML_Session::getSession();
+        $session = Session::getSession();
         return (bool)$session->getData(
             self::SESSION_TYPE,
             self::HAS_SEEN_SPLASH_PAGE
@@ -157,7 +166,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
     
     public static function skipSplashPagesFor($seconds)
     {
-        $session = SimpleSAML_Session::getSession();
+        $session = Session::getSession();
         $session->setData(
             self::SESSION_TYPE,
             self::HAS_SEEN_SPLASH_PAGE,
@@ -180,7 +189,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $loggerClass = $config['loggerClass'] ?? Psr3SamlLogger::class;
         $this->logger = new $loggerClass();
         if (! $this->logger instanceof LoggerInterface) {
-            throw new Exception(sprintf(
+            throw new \Exception(sprintf(
                 'The specified loggerClass (%s) does not implement '
                 . '\\Psr\\Log\\LoggerInterface.',
                 var_export($loggerClass, true)
@@ -246,19 +255,19 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         /* Save state and redirect. */
         $state['expiresAtTimestamp'] = $expiryTimestamp;
         $state['accountName'] = $accountName;
-        $id = SimpleSAML_Auth_State::saveState(
+        $id = State::saveState(
             $state,
             'expirychecker:redirected_to_password_change_url'
         );
         $ignoreMinutes = 60;
 
-        $session = SimpleSAML_Session::getInstance();
+        $session = Session::getSession();
         $idpExpirySession = $session->getData($sessionType, $change_pwd_session);
         
         // If the session shows that the User already passed this way,
         //  don't redirect to change password page
         if ($idpExpirySession !== null) {
-            SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
+            ProcessingChain::resumeProcessing($state);
         } else {
             // Otherwise, set a value to tell us they've probably changed
             // their password, in order to allow password to get propagated
@@ -268,7 +277,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
                 1,
                 (60 * $ignoreMinutes)
             );
-            $session->saveSession();
+            $session->save();
         }
         
         
@@ -278,9 +287,9 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         if (array_key_exists('saml:RelayState', $state)) {
             $relayState = $state['saml:RelayState'];
             if (strpos($relayState, $passwordChangeUrl) !== false) {
-                SimpleSAML_Auth_ProcessingChain::resumeProcessing($state);
+                ProcessingChain::resumeProcessing($state);
             } else {
-                $returnTo = sspmod_expirychecker_Utilities::getUrlFromRelayState(
+                $returnTo = Utilities::getUrlFromRelayState(
                     $relayState
                 );
                 if (! empty($returnTo)) {
@@ -295,7 +304,7 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
             'passwordChangeUrl' => $passwordChangeUrl,
         ]));
 
-        SimpleSAML_Utilities::redirect($passwordChangeUrl, array());
+        HTTP::redirectTrustedURL($passwordChangeUrl, array());
     }
     
     /**
@@ -367,10 +376,10 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $state['passwordChangeUrl'] = $this->passwordChangeUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;
         
-        $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:expired');
-        $url = SimpleSAML\Module::getModuleURL('expirychecker/expired.php');
-        
-        SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
+        $id = State::saveState($state, 'expirychecker:expired');
+        $url = Module::getModuleURL('expirychecker/expired.php');
+
+        HTTP::redirectTrustedURL($url, array('StateId' => $id));
     }
     
     /**
@@ -403,9 +412,9 @@ class sspmod_expirychecker_Auth_Process_ExpiryDate extends SimpleSAML_Auth_Proce
         $state['passwordChangeUrl'] = $this->passwordChangeUrl;
         $state['originalUrlParam'] = $this->originalUrlParam;
         
-        $id = SimpleSAML_Auth_State::saveState($state, 'expirychecker:about2expire');
-        $url = SimpleSAML\Module::getModuleURL('expirychecker/about2expire.php');
-        
-        SimpleSAML_Utilities::redirect($url, array('StateId' => $id));
+        $id = State::saveState($state, 'expirychecker:about2expire');
+        $url = Module::getModuleURL('expirychecker/about2expire.php');
+
+        HTTP::redirectTrustedURL($url, array('StateId' => $id));
     }
 }
