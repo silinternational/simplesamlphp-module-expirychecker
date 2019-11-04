@@ -1,5 +1,5 @@
 default:
     suites:
         expiry_features:
-            paths:    [ %paths.base%/../features/expiry.feature ]
+            paths:    [ '%paths.base%/../features/expiry.feature' ]
             contexts: [ Sil\SspExpiryChecker\Behat\context\ExpiryContext ]
