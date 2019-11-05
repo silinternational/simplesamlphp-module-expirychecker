@@ -117,7 +117,7 @@ class ExpiryContext implements Context
      */
     public function iLogin()
     {
-        $this->session->visit('http://ssp-hub-sp.local:8081/module.php/core/authenticate.php?as=ssp-hub-idp');
+        $this->session->visit('http://sp/module.php/core/authenticate.php?as=ssp-hub-idp');
         $page = $this->session->getPage();
         $page->fillField('username', $this->username);
         $page->fillField('password', $this->password);
