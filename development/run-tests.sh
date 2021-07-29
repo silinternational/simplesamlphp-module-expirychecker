@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-./setup-logentries.sh
 
 # Try to install composer dev dependencies
 cd /data/vendor/simplesamlphp/simplesamlphp/modules/expirychecker
