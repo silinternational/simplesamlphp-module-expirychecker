@@ -157,7 +157,7 @@ class ExpiryDate extends ProcessingFilter
     
     public static function hasSeenSplashPageRecently()
     {
-        $session = Session::getSession();
+        $session = Session::getSessionFromRequest();
         return (bool)$session->getData(
             self::SESSION_TYPE,
             self::HAS_SEEN_SPLASH_PAGE
@@ -166,7 +166,7 @@ class ExpiryDate extends ProcessingFilter
     
     public static function skipSplashPagesFor($seconds)
     {
-        $session = Session::getSession();
+        $session = Session::getSessionFromRequest();
         $session->setData(
             self::SESSION_TYPE,
             self::HAS_SEEN_SPLASH_PAGE,
@@ -261,7 +261,7 @@ class ExpiryDate extends ProcessingFilter
         );
         $ignoreMinutes = 60;
 
-        $session = Session::getSession();
+        $session = Session::getSessionFromRequest();
         $idpExpirySession = $session->getData($sessionType, $change_pwd_session);
         
         // If the session shows that the User already passed this way,
