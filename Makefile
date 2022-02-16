@@ -13,7 +13,7 @@ behat:
 
 clean:
 	docker-compose kill
-	docker system prune -f
+	docker-compose rm -f
 
 composer:
 	docker-compose run --rm composer bash -c "composer install --no-scripts"
