@@ -14,7 +14,7 @@
     "php": ">=7.2",
     "ext-json": "*",
     "silinternational/psr3-adapters": "^1.1 || ^2.0",
-    "simplesamlphp/simplesamlphp": "~1.17.7 || ~1.18.4"
+    "simplesamlphp/simplesamlphp": "~1.17.7 || ~1.18.4 || ~1.19.5"
   },
   "require-dev": {
     "behat/behat": "^3.3",
