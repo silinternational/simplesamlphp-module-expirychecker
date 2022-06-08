@@ -32,6 +32,7 @@ class ExpiryDate extends ProcessingFilter
     private $employeeIdAttr = 'employeeNumber';
     private $expiryDateAttr = null;
     private $dateFormat = 'Y-m-d';
+    private $dateType = null;
     
     /** @var LoggerInterface */
     protected $logger;
@@ -75,6 +76,9 @@ class ExpiryDate extends ProcessingFilter
             'dateFormat' => [
                 Validator::STRING,
                 Validator::NOT_EMPTY,
+            ],
+             'dateType' => [
+                Validator::STRING,
             ],
         ]);
     }
@@ -137,9 +141,17 @@ class ExpiryDate extends ProcessingFilter
      * @return int The expiration timestamp.
      * @throws \Exception
      */
-    protected function getExpiryTimestamp($expiryDateAttr, $state)
+    protected function getExpiryTimestamp($expiryDateAttr, $state,$dateType)
     {
         $expiryDateString = $this->getAttribute($expiryDateAttr, $state);
+        
+       // for LDAP,AD convert FILETIME to Unix timestamp
+        if($dateType=='FILETIME'){
+            $fileTime = $expiryDateString;
+            $winSecs       = (int)($fileTime / 10000000); // divide by 10 000 000 to get seconds
+            $unixTimestamp = ($winSecs - 11644473600); // 1.1.1600 -> 1.1.1970 difference in seconds
+            $expiryDateString=date(\DateTime::RFC822, $unixTimestamp);
+        }
         
         // Ensure that EVERY user login provides a usable password expiration date.
         $expiryTimestamp = strtotime($expiryDateString) ?: null;
