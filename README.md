@@ -45,6 +45,7 @@ Example (in `metadata/saml20-idp-hosted.php`):
             'originalUrlParam' => 'originalurl',
             'dateFormat' => 'm.d.Y', // Use PHP's date syntax.
             'loggerClass' => '\\Sil\\Psr3Adapters\\Psr3SamlLogger',
+            'dateType'=>'FILETIME'  // FILETIME: for ldap,activedriectory 
         ],
         
         // ...
