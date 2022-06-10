@@ -341,7 +341,7 @@ class ExpiryDate extends ProcessingFilter
         
         // Get the necessary info from the state data.
         $accountName = $this->getAttribute($this->accountNameAttr, $state);
-        $expiryTimestamp = $this->getExpiryTimestamp($this->expiryDateAttr, $state);
+        $expiryTimestamp = $this->getExpiryTimestamp($this->expiryDateAttr, $state,$this->dateType);
         
         $this->logger->warning(json_encode([
             'event' => 'expirychecker: will check expiration date',
