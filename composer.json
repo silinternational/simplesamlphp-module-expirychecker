@@ -13,7 +13,7 @@
   "require": {
     "php": ">=7.2",
     "ext-json": "*",
-    "silinternational/psr3-adapters": "^1.1 || ^2.0",
+    "silinternational/psr3-adapters": "^1.1 || ^2.0 || ^3.0",
     "simplesamlphp/simplesamlphp": "~1.17.7 || ~1.18.4"
   },
   "require-dev": {
@@ -27,6 +27,11 @@
     "psr-4": {
       "Sil\\SspExpiryChecker\\": "src/",
       "Sil\\SspExpiryChecker\\Behat\\": "features/"
+    }
+  },
+  "config": {
+    "allow-plugins": {
+      "simplesamlphp/composer-module-installer": true
     }
   }
 }
