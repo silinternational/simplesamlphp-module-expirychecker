@@ -17,6 +17,9 @@ clean:
 
 composer:
 	docker-compose run --rm composer bash -c "composer install --no-scripts"
+	mkdir -p vendor/simplesamlphp/simplesamlphp/www/saml2/idp
+	mkdir -p vendor/simplesamlphp/simplesamlphp/config
+	mkdir -p vendor/simplesamlphp/simplesamlphp/metadata
 	touch vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 	touch vendor/simplesamlphp/simplesamlphp/config/authsources.php
 	touch vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
