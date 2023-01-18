@@ -1,0 +1,19 @@
+unittests:
+  image: silintl/ssp-base:develop
+  volumes:
+    - ./development/unittests.sh:/data/unittests.sh
+    - ./development/run-debug.sh:/data/run-debug.sh
+
+    # Utilize this module's files
+    - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/expirychecker/lib
+    - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/expirychecker/www
+    - ./unittests:/data/unittests
+  environment:
+    - ADMIN_EMAIL=john_doe@there.com
+    - ADMIN_PASS=1234qwer
+    - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
+    - SECURE_COOKIE=false
+    - ADMIN_PROTECT_INDEX_PAGE=false
+    - SHOW_SAML_ERRORS=true
+    - HUB_MODE=false
+    - IDP_NAME=Idp
