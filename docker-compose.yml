@@ -109,6 +109,4 @@ services:
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=false
       - IDP_NAME=Idp
-    # docker-compose exec -it unittests bash
-    # ./unittests.sh
     command: /data/run-debug.sh

@@ -35,7 +35,7 @@ enabledebug:
 ps:
 	docker-compose ps
 
-tests: unit-tests functional-tests
+test: unit-tests functional-tests
 
 functional-tests: composer web
 	sleep 10
