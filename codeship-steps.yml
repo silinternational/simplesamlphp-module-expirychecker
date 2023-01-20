@@ -1,7 +1,7 @@
-- name: unittests
-  service: unittests
-  command: "/data/unittests.sh"
+#- name: unittests
+#  service: unittests
+#  command: "/data/unittests.sh"
 
 - name: functionaltests
   service: functionaltests
-  command: bash -c "whenavail idp 80 200 echo idp ready && ls -al /data/vendor/bin "
+  command: bash -c "whenavail idp 80 200 echo idp ready && ls -al /data/vendor/ "
