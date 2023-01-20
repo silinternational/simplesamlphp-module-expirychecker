@@ -70,7 +70,7 @@ functionaltests:
     - sp
   volumes:
     - ./composer.json:/data/composer.json
-    - ./composer.lock:/data/composer.lock
+    - ./development/run-tests.sh:/data/run-tests.sh
     - ./features:/data/features
     - ./vendor:/data/vendor
   env_file:

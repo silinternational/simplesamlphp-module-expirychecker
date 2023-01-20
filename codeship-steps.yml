@@ -4,4 +4,4 @@
 
 - name: functionaltests
   service: functionaltests
-  command: bash -c "whenavail idp 80 200 echo idp ready && /data/vendor/bin/behat --config=features/behat.yml --strict --stop-on-failure --append-snippets"
+  command: bash -c "rm -f /data/composer.lock && whenavail idp 80 200 echo idp ready && /data/run-tests.sh"
