@@ -9,7 +9,7 @@ bashtests:
 	docker-compose run --rm tests bash
 
 behat:
-	docker-compose run --rm tests bash -c "vendor/bin/behat --config=features/behat.yml --strict --stop-on-failure --append-snippets"
+	docker-compose run --rm tests bash -c "whenavail idp 80 200 echo idp ready && vendor/bin/behat --config=features/behat.yml --strict --stop-on-failure --append-snippets"
 
 clean:
 	docker-compose kill
@@ -38,7 +38,6 @@ ps:
 test: unit-tests functional-tests
 
 functional-tests: composer web
-	sleep 10
 	make behat
 
 unit-tests:
