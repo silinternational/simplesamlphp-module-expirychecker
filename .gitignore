@@ -1,5 +1,8 @@
 local.*
 !local.*.dist
+*.aes
+*.env
+!common.env
 /nbproject/
 .vagrant/
 vendor/
