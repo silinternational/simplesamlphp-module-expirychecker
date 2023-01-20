@@ -24,6 +24,7 @@ idp:
     - ./development/idp-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
   env_file:
     - ./common.env
+  encrypted_env_file: codeship.env.encrypted
   environment:
     - ADMIN_EMAIL=john_doe@there.com
     - ADMIN_PASS=a
@@ -76,6 +77,7 @@ functionaltests:
     - ./vendor:/data/vendor
   env_file:
     - ./common.env
+  encrypted_env_file: codeship.env.encrypted
   working_dir: /data
 
 
@@ -89,6 +91,8 @@ unittests:
     - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/expirychecker/lib
     - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/expirychecker/www
     - ./unittests:/data/unittests
+
+  encrypted_env_file: codeship.env.encrypted
   environment:
     - ADMIN_EMAIL=john_doe@there.com
     - ADMIN_PASS=1234qwer
