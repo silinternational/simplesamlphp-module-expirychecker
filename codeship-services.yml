@@ -65,8 +65,6 @@ composer:
 
 functionaltests:
   image: silintl/ssp-base:develop
-  volumes_from:
-    - idp
   depends_on:
     - idp
     - sp
