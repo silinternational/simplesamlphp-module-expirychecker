@@ -35,13 +35,8 @@ enabledebug:
 ps:
 	docker-compose ps
 
-test: unit-tests functional-tests
-
-functional-tests: composer web
+test: composer web
 	make behat
-
-unit-tests:
-	docker-compose run --rm unittests /data/unittests.sh
 
 web:
 	docker-compose up -d idp sp

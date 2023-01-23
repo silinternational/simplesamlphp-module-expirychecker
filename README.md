@@ -68,12 +68,6 @@ using PHP `date()` syntax. See <http://php.net/manual/en/function.date.php>.
 The `loggerClass` parameter specifies the name of a PSR-3 compatible class that 
 can be autoloaded, to use as the logger within ExpiryDate.
 
-## Running unit tests manually in the container ##
-
-- docker-compose up -d unittests
-- docker-compose exec -it unittests bash
-- ./unittests.sh
-
 ## Contributing ##
 To contribute, please submit issues or pull requests at 
 https://github.com/silinternational/simplesamlphp-module-expirychecker

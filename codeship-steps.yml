@@ -1,7 +1,3 @@
-- name: unittests
-  service: unittests
-  command: "/data/unittests.sh"
-
-- name: functionaltests
-  service: functionaltests
+- name: test
+  service: test
   command: bash -c "rm -f /data/composer.lock && whenavail idp 80 200 echo idp ready && /data/run-tests.sh"
