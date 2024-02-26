@@ -1,0 +1,14 @@
+name: Test
+
+on:
+  push:
+
+jobs:
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Tests
+        run: docker-compose -f actions-services.yml run --rm test /data/run-tests.sh
