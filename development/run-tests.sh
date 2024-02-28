@@ -6,4 +6,4 @@ set -e
 COMPOSER_ROOT_VERSION=dev-develop composer install --no-interaction --no-scripts
 
 # Run the feature tests
-./vendor/bin/behat --config=features/behat.yml
+whenavail idp 80 200 ./vendor/bin/behat --config=features/behat.yml

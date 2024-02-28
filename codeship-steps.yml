@@ -1,3 +1,0 @@
-- name: test
-  service: test
-  command: bash -c "whenavail idp 80 200 echo idp ready && /data/run-tests.sh"
